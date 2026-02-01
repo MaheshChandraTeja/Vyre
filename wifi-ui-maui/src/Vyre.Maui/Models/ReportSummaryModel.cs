@@ -6,5 +6,5 @@ public sealed record ReportSummaryModel(
     int AccessPointCount,
     int IssueCount,
     int RecommendationCount,
-    string ReportJson
+    string ReportJson // stored full JSON for export/share in Milestone 3
 );

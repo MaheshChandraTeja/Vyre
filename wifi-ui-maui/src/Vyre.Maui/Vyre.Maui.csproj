@@ -15,22 +15,28 @@
     <ApplicationDisplayVersion>0.1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
 
+    <!-- For local dev, don't require MSIX manifest -->
     <WindowsPackageType>None</WindowsPackageType>
 
+    <!-- CMake build output directory used for copying native interop DLL -->
     <VyreCMakeBuildDir>$(MSBuildProjectDirectory)\..\..\..\build\windows-debug</VyreCMakeBuildDir>
   </PropertyGroup>
 
+  <!-- Packages -->
   <ItemGroup>
     <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.100" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
   </ItemGroup>
 
+  <!-- XAML compilation -->
   <ItemGroup>
     <MauiXaml Update="**\*.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
   </ItemGroup>
 
+  <!-- Copy native DLL for Windows builds only -->
   <Target Name="CopyNativeInterop"
           AfterTargets="Build"
           Condition="'$(TargetFramework)'=='net8.0-windows10.0.19041.0'">
@@ -43,10 +49,6 @@
 
     <ItemGroup>
       <NativeDll Include="@(NativeDllCandidates)" Condition="Exists('%(Identity)')" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     </ItemGroup>
 
     <Error Condition="'@(NativeDll)'==''"

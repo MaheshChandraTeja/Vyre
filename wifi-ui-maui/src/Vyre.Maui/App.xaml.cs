@@ -2,9 +2,9 @@ namespace Vyre.Maui;
 
 public partial class App : Application
 {
-    public App()
+    public App(AppShell appShell)
     {
         InitializeComponent();
-        MainPage = shell;
+        MainPage = appShell;
     }
 }
