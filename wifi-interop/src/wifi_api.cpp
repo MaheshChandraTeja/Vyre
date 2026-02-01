@@ -13,6 +13,12 @@
 #include "wifi/report.hpp"
 #include "wifi_core/wifi_core.h"
 
+#ifdef _WIN32
+#include "wifi/platform/windows/scanner_wlanapi.hpp"
+#include "wifi/export.hpp"
+#endif
+
+
 namespace {
 
 thread_local std::string g_last_error;
@@ -411,6 +417,45 @@ VyreWifiErrorCode vyre_wifi_analyze_json(const char* scan_json_utf8, char** out_
   }
 }
 
+VyreWifiErrorCode vyre_wifi_scan_now(char** out_scan_json_utf8) {
+  g_last_error.clear();
+
+  if (!out_scan_json_utf8) {
+    set_last_error("out_scan_json_utf8 is null");
+    return VYRE_WIFI_ERR_INVALID_ARGUMENT;
+  }
+  *out_scan_json_utf8 = nullptr;
+
+#ifndef _WIN32
+  set_last_error("scan_now is only implemented on Windows in Milestone 4");
+  return VYRE_WIFI_ERR_NOT_IMPLEMENTED;
+#else
+  try {
+    vyre::wifi::WindowsWlanScanner scanner;
+    auto scan = scanner.scan();
+    std::string json = vyre::wifi::exporter::to_json(scan);
+
+    char* p = dup_utf8(json);
+    if (!p) {
+      set_last_error("malloc failed");
+      return VYRE_WIFI_ERR_INTERNAL;
+    }
+
+    *out_scan_json_utf8 = p;
+    return VYRE_WIFI_OK;
+  } catch (const vyre::wifi::ScanError& e) {
+    set_last_error(e.what());
+    return VYRE_WIFI_ERR_INTERNAL;
+  } catch (const std::exception& e) {
+    set_last_error(e.what());
+    return VYRE_WIFI_ERR_INTERNAL;
+  } catch (...) {
+    set_last_error("Unknown exception in scan_now");
+    return VYRE_WIFI_ERR_INTERNAL;
+  }
+#endif
+}
+
 VyreWifiErrorCode vyre_wifi_scan_start(void) {
   g_last_error.clear();
   set_last_error("scan_start not implemented in Milestone 2");
@@ -425,13 +470,39 @@ VyreWifiErrorCode vyre_wifi_scan_stop(void) {
 
 VyreWifiErrorCode vyre_wifi_scan_get_results(char** out_scan_json_utf8) {
   g_last_error.clear();
+
   if (!out_scan_json_utf8) {
     set_last_error("out_scan_json_utf8 is null");
     return VYRE_WIFI_ERR_INVALID_ARGUMENT;
   }
   *out_scan_json_utf8 = nullptr;
-  set_last_error("scan_get_results not implemented in Milestone 2");
+
+#ifndef _WIN32
+  set_last_error("scan_get_results is only implemented on Windows in Milestone 4");
   return VYRE_WIFI_ERR_NOT_IMPLEMENTED;
+#else
+  try {
+    vyre::wifi::WindowsWlanScanner scanner;
+    auto scan = scanner.scan();
+
+    std::string json = vyre::wifi::exporter::to_json(scan);
+
+    char* p = dup_utf8(json);
+    if (!p) {
+      set_last_error("malloc failed");
+      return VYRE_WIFI_ERR_INTERNAL;
+    }
+
+    *out_scan_json_utf8 = p;
+    return VYRE_WIFI_OK;
+  } catch (const std::exception& e) {
+    set_last_error(e.what());
+    return VYRE_WIFI_ERR_INTERNAL;
+  } catch (...) {
+    set_last_error("Unknown exception in scan_get_results");
+    return VYRE_WIFI_ERR_INTERNAL;
+  }
+#endif
 }
 
 }

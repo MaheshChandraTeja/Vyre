@@ -12,11 +12,16 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder.UseMauiApp<App>();
 
-#if DEBUG
-        builder.Logging.AddDebug();
-#endif
+        #if DEBUG
+            builder.Logging.AddDebug();
+        #endif
 
-        builder.Services.AddSingleton<IWifiEngine, DummyWifiEngine>();
+        #if WINDOWS
+            builder.Services.AddSingleton<IWifiEngine, WindowsWifiEngine>();
+        #else
+            builder.Services.AddSingleton<IWifiEngine, DummyWifiEngine>();
+        #endif
+
         builder.Services.AddSingleton<ISettingsStore, PreferencesSettingsStore>();
         builder.Services.AddSingleton<IReportStore, FileReportStore>();
 
