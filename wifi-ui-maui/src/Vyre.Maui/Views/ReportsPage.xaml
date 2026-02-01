@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Vyre.Maui.Views.ReportsPage"
+    Title="Reports">
+
+    <VerticalStackLayout Padding="16" Spacing="10">
+        <HorizontalStackLayout Spacing="10">
+            <Button Text="Load" Command="{Binding LoadCommand}" />
+            <Button Text="Export Selected" Command="{Binding ExportSelectedCommand}" />
+            <Button Text="Clear" Command="{Binding ClearCommand}" />
+        </HorizontalStackLayout>
+
+        <Label Text="{Binding StatusMessage}" FontAttributes="Italic"/>
+
+        <CollectionView ItemsSource="{Binding Reports}" SelectionMode="Single" SelectedItem="{Binding Selected}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="8" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                        <Label Text="{Binding ReportId}" FontAttributes="Bold"/>
+                        <Label Grid.Column="1" Text="{Binding GeneratedAtUtc}" FontSize="12" Opacity="0.8"/>
+                        <Label Grid.Row="1"
+                               Text="{Binding AccessPointCount, StringFormat='APs: {0}'}"
+                               FontSize="12" Opacity="0.7"/>
+                        <Label Grid.Row="1" Grid.Column="1"
+                               Text="{Binding IssueCount, StringFormat='Issues: {0}'}"
+                               FontSize="12" Opacity="0.7"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>

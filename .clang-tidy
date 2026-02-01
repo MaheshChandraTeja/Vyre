@@ -1,0 +1,14 @@
+Checks: >
+  -*,
+  clang-analyzer-*,
+  bugprone-*,
+  modernize-*,
+  performance-*,
+  readability-*,
+  cppcoreguidelines-*,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+  -readability-magic-numbers
+WarningsAsErrors: ""
+HeaderFilterRegex: ".*"
+FormatStyle: file

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Vyre.Maui.Views.SettingsPage"
+    Title="Settings">
+
+    <VerticalStackLayout Padding="16" Spacing="12">
+        <Label Text="{Binding StatusMessage}" FontAttributes="Italic"/>
+
+        <Entry Placeholder="Interface (auto)" Text="{Binding InterfaceSelection}" />
+
+        <HorizontalStackLayout Spacing="10">
+            <Label Text="Scan interval (sec)" VerticalTextAlignment="Center"/>
+            <Entry WidthRequest="80" Keyboard="Numeric" Text="{Binding ScanIntervalSeconds}" />
+        </HorizontalStackLayout>
+
+        <CheckBox IsChecked="{Binding PrivacyHideBssids}" />
+        <Label Text="Privacy: Hide BSSIDs" />
+
+        <CheckBox IsChecked="{Binding PrivacyHideSsids}" />
+        <Label Text="Privacy: Hide SSIDs" />
+
+        <HorizontalStackLayout Spacing="10">
+            <Button Text="Load" Command="{Binding LoadCommand}" />
+            <Button Text="Save" Command="{Binding SaveCommand}" />
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>

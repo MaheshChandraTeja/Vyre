@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Vyre.Maui.Views.InsightsPage"
+    Title="Insights">
+
+    <VerticalStackLayout Padding="16" Spacing="10">
+        <Button Text="Analyze (dummy)" Command="{Binding AnalyzeCommand}" />
+        <Label Text="{Binding StatusMessage}" FontAttributes="Italic"/>
+
+        <Label Text="Issues" FontAttributes="Bold"/>
+        <CollectionView ItemsSource="{Binding Issues}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <VerticalStackLayout Padding="8">
+                        <Label Text="{Binding Id}" FontAttributes="Bold"/>
+                        <Label Text="{Binding Message}" FontSize="12" Opacity="0.8"/>
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Label Text="Recommendations" FontAttributes="Bold"/>
+        <CollectionView ItemsSource="{Binding Recommendations}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <VerticalStackLayout Padding="8">
+                        <Label Text="{Binding Id}" FontAttributes="Bold"/>
+                        <Label Text="{Binding Message}" FontSize="12" Opacity="0.8"/>
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>

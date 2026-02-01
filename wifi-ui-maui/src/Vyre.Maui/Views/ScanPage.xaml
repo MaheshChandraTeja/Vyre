@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Vyre.Maui.Views.ScanPage"
+    Title="Scan">
+
+    <VerticalStackLayout Padding="16" Spacing="10">
+        <HorizontalStackLayout Spacing="10">
+            <Entry Placeholder="Search SSID/BSSID" Text="{Binding SearchText}" HorizontalOptions="FillAndExpand"/>
+            <Button Text="Refresh" Command="{Binding RefreshCommand}" />
+        </HorizontalStackLayout>
+
+        <HorizontalStackLayout Spacing="10">
+            <CheckBox IsChecked="{Binding Show24Ghz}" />
+            <Label Text="2.4" VerticalTextAlignment="Center"/>
+            <CheckBox IsChecked="{Binding Show5Ghz}" />
+            <Label Text="5" VerticalTextAlignment="Center"/>
+            <CheckBox IsChecked="{Binding Show6Ghz}" />
+            <Label Text="6" VerticalTextAlignment="Center"/>
+            <CheckBox IsChecked="{Binding HideHiddenSsids}" />
+            <Label Text="Hide hidden" VerticalTextAlignment="Center"/>
+        </HorizontalStackLayout>
+
+        <Picker Title="Sort" SelectedItem="{Binding SortMode}">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Signal</x:String>
+                    <x:String>SSID</x:String>
+                    <x:String>Band</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+
+        <Label Text="{Binding StatusMessage}" FontAttributes="Italic"/>
+
+        <CollectionView ItemsSource="{Binding Filtered}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="8" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                        <Label Text="{Binding Ssid}" FontAttributes="Bold" />
+                        <Label Grid.Column="1" Text="{Binding RssiDbm}" />
+                        <Label Grid.Row="1" Text="{Binding Bssid}" FontSize="12" Opacity="0.7"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding Band}" FontSize="12" Opacity="0.7"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>

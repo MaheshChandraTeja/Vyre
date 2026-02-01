@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  core-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v5
+
+      - name: Configure
+        shell: pwsh
+        run: cmake --preset windows-debug
+
+      - name: Build
+        shell: pwsh
+        run: cmake --build --preset windows-debug --config Debug
+
+      - name: Test
+        shell: pwsh
+        run: ctest --preset windows-debug --output-on-failure
+
+  core-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Ninja
+        run: sudo apt-get update && sudo apt-get install -y ninja-build
+
+      - name: Configure
+        run: cmake --preset linux-debug
+
+      - name: Build
+        run: cmake --build --preset linux-debug
+
+      - name: Test
+        run: ctest --preset linux-debug --output-on-failure
+
+  maui-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install MAUI workload
+        shell: pwsh
+        run: dotnet workload install maui --ignore-failed-sources
+
+      - name: Restore
+        shell: pwsh
+        run: dotnet restore wifi-ui-maui/Vyre.Maui.sln
+
+      - name: Build MAUI (Windows)
+        shell: pwsh
+        run: dotnet build wifi-ui-maui/src/Vyre.Maui/Vyre.Maui.csproj -c Release -f net8.0-windows10.0.19041.0
+
+      - name: Run .NET tests
+        shell: pwsh
+        run: dotnet test wifi-ui-maui/tests/Vyre.Maui.Tests/Vyre.Maui.Tests.csproj -c Release

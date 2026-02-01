@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0-windows10.0.19041.0;net8.0-android;net8.0-ios</TargetFrameworks>
+
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <OutputType>Exe</OutputType>
+
+    <ApplicationTitle>Vyre</ApplicationTitle>
+    <ApplicationId>com.vyre.wifianalyzer</ApplicationId>
+    <ApplicationDisplayVersion>0.1.0</ApplicationDisplayVersion>
+    <ApplicationVersion>1</ApplicationVersion>
+
+    <WindowsPackageType>None</WindowsPackageType>
+
+    <VyreCMakeBuildDir>$(MSBuildProjectDirectory)\..\..\..\build\windows-debug</VyreCMakeBuildDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.100" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <MauiXaml Update="**\*.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+  </ItemGroup>
+
+  <Target Name="CopyNativeInterop"
+          AfterTargets="Build"
+          Condition="'$(TargetFramework)'=='net8.0-windows10.0.19041.0'">
+
+    <ItemGroup>
+      <NativeDllCandidates Include="$(VyreCMakeBuildDir)\bin\wifi-interop.dll" />
+      <NativeDllCandidates Include="$(VyreCMakeBuildDir)\bin\$(Configuration)\wifi-interop.dll" />
+      <NativeDllCandidates Include="$(VyreCMakeBuildDir)\wifi-interop.dll" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <NativeDll Include="@(NativeDllCandidates)" Condition="Exists('%(Identity)')" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    </ItemGroup>
+
+    <Error Condition="'@(NativeDll)'==''"
+           Text="wifi-interop.dll not found. Looked in: @(NativeDllCandidates). Build native first: cmake --build --preset windows-debug --config $(Configuration)" />
+
+    <Message Text="Copying native DLL to $(OutDir): @(NativeDll)" Importance="High" />
+    <Copy SourceFiles="@(NativeDll)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

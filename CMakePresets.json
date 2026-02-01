@@ -1,0 +1,79 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": { "major": 3, "minor": 24, "patch": 0 },
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "VYRE_ENABLE_TIDY": "OFF",
+        "VYRE_ENABLE_SANITIZERS": "OFF",
+        "VYRE_BUILD_SHARED": "ON"
+      }
+    },
+
+    {
+      "name": "windows-debug",
+      "inherits": "base",
+      "displayName": "Windows Debug (Ninja)",
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" },
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+    },
+    {
+      "name": "windows-release",
+      "inherits": "base",
+      "displayName": "Windows Release (Ninja)",
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" },
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
+    },
+
+    {
+      "name": "linux-debug",
+      "inherits": "base",
+      "displayName": "Linux Debug (Ninja)",
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" },
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+    },
+    {
+      "name": "linux-asan",
+      "inherits": "linux-debug",
+      "displayName": "Linux Debug + ASan/UBSan",
+      "cacheVariables": { "VYRE_ENABLE_SANITIZERS": "ON" }
+    },
+
+    {
+      "name": "android-arm64",
+      "inherits": "base",
+      "displayName": "Android arm64-v8a (hook preset)",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_SYSTEM_NAME": "Android",
+        "CMAKE_ANDROID_ARCH_ABI": "arm64-v8a",
+        "CMAKE_ANDROID_STL_TYPE": "c++_shared"
+      }
+    },
+    {
+      "name": "ios-arm64",
+      "inherits": "base",
+      "displayName": "iOS arm64 (hook preset)",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_SYSTEM_NAME": "iOS"
+      }
+    }
+  ],
+  "buildPresets": [
+    { "name": "windows-debug", "configurePreset": "windows-debug" },
+    { "name": "windows-release", "configurePreset": "windows-release" },
+    { "name": "linux-debug", "configurePreset": "linux-debug" },
+    { "name": "linux-asan", "configurePreset": "linux-asan" }
+  ],
+  "testPresets": [
+    { "name": "windows-debug", "configurePreset": "windows-debug" },
+    { "name": "linux-debug", "configurePreset": "linux-debug" },
+    { "name": "linux-asan", "configurePreset": "linux-asan" }
+  ]
+}

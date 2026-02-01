@@ -1,0 +1,67 @@
+# =========================
+# General
+# =========================
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# =========================
+# Build artifacts
+# =========================
+build/
+out/
+bin/
+obj/
+
+# =========================
+# CMake
+# =========================
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+*.cmake.user
+*.ninja
+.ninja_deps
+.ninja_log
+
+# =========================
+# MSVC / Visual Studio
+# =========================
+.vs/
+*.vcxproj*
+*.sln.docstates
+
+# =========================
+# .NET / MAUI
+# =========================
+**/bin/
+**/obj/
+**/.vs/
+
+# MAUI platform outputs
+**/Platforms/**/bin/
+**/Platforms/**/obj/
+
+# =========================
+# NuGet
+# =========================
+.nuget/
+packages/
+
+# =========================
+# Native runtime copies
+# (built DLLs copied for P/Invoke)
+# =========================
+wifi-ui-maui/**/wifi-interop.dll
+
+# =========================
+# Test outputs
+# =========================
+TestResults/
+
+# =========================
+# IDEs
+# =========================
+.idea/
+.vscode/
