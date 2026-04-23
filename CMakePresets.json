@@ -1,79 +1,137 @@
 {
   "version": 6,
-  "cmakeMinimumRequired": { "major": 3, "minor": 24, "patch": 0 },
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 26,
+    "patch": 0
+  },
   "configurePresets": [
     {
       "name": "base",
       "hidden": true,
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build/${presetName}",
       "cacheVariables": {
-        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-        "VYRE_ENABLE_TIDY": "OFF",
-        "VYRE_ENABLE_SANITIZERS": "OFF",
-        "VYRE_BUILD_SHARED": "ON"
+        "CMAKE_CXX_STANDARD": "20",
+        "CMAKE_CXX_STANDARD_REQUIRED": "ON",
+        "CMAKE_CXX_EXTENSIONS": "OFF",
+        "VYRE_BUILD_TESTS": "ON",
+        "VYRE_BUILD_INTEROP": "ON"
       }
     },
-
     {
       "name": "windows-debug",
-      "inherits": "base",
-      "displayName": "Windows Debug (Ninja)",
-      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" },
-      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
-    },
-    {
-      "name": "windows-release",
-      "inherits": "base",
-      "displayName": "Windows Release (Ninja)",
-      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" },
-      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
-    },
-
-    {
-      "name": "linux-debug",
-      "inherits": "base",
-      "displayName": "Linux Debug (Ninja)",
-      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux" },
-      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
-    },
-    {
-      "name": "linux-asan",
-      "inherits": "linux-debug",
-      "displayName": "Linux Debug + ASan/UBSan",
-      "cacheVariables": { "VYRE_ENABLE_SANITIZERS": "ON" }
-    },
-
-    {
-      "name": "android-arm64",
-      "inherits": "base",
-      "displayName": "Android arm64-v8a (hook preset)",
+      "inherits": ["base"],
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/windows-debug",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_SYSTEM_NAME": "Android",
-        "CMAKE_ANDROID_ARCH_ABI": "arm64-v8a",
-        "CMAKE_ANDROID_STL_TYPE": "c++_shared"
+        "CMAKE_BUILD_TYPE": "Debug"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
       }
     },
     {
-      "name": "ios-arm64",
-      "inherits": "base",
-      "displayName": "iOS arm64 (hook preset)",
+      "name": "macos-debug",
+      "inherits": ["base"],
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/macos-debug",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_SYSTEM_NAME": "iOS"
+        "CMAKE_BUILD_TYPE": "Debug"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Darwin"
+      }
+    },
+    {
+      "name": "linux-debug",
+      "inherits": ["base"],
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/linux-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    },
+    {
+      "name": "android-arm64-debug",
+      "inherits": ["base"],
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/android-arm64-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_SYSTEM_NAME": "Android",
+        "CMAKE_TOOLCHAIN_FILE": "$env{ANDROID_NDK_HOME}/build/cmake/android.toolchain.cmake",
+        "ANDROID_ABI": "arm64-v8a",
+        "ANDROID_PLATFORM": "24"
+      }
+    },
+    {
+      "name": "ios-sim-debug",
+      "inherits": ["base"],
+      "generator": "Xcode",
+      "binaryDir": "${sourceDir}/build/ios-sim-debug",
+      "cacheVariables": {
+        "CMAKE_SYSTEM_NAME": "iOS",
+        "CMAKE_OSX_SYSROOT": "iphonesimulator",
+        "CMAKE_OSX_ARCHITECTURES": "arm64"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Darwin"
       }
     }
   ],
   "buildPresets": [
-    { "name": "windows-debug", "configurePreset": "windows-debug" },
-    { "name": "windows-release", "configurePreset": "windows-release" },
-    { "name": "linux-debug", "configurePreset": "linux-debug" },
-    { "name": "linux-asan", "configurePreset": "linux-asan" }
+    {
+      "name": "windows-debug",
+      "configurePreset": "windows-debug"
+    },
+    {
+      "name": "macos-debug",
+      "configurePreset": "macos-debug"
+    },
+    {
+      "name": "linux-debug",
+      "configurePreset": "linux-debug"
+    },
+    {
+      "name": "android-arm64-debug",
+      "configurePreset": "android-arm64-debug"
+    },
+    {
+      "name": "ios-sim-debug",
+      "configurePreset": "ios-sim-debug"
+    }
   ],
   "testPresets": [
-    { "name": "windows-debug", "configurePreset": "windows-debug" },
-    { "name": "linux-debug", "configurePreset": "linux-debug" },
-    { "name": "linux-asan", "configurePreset": "linux-asan" }
+    {
+      "name": "windows-debug",
+      "configurePreset": "windows-debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "macos-debug",
+      "configurePreset": "macos-debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "linux-debug",
+      "configurePreset": "linux-debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
   ]
 }

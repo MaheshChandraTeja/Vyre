@@ -1,67 +1,25 @@
-# =========================
-# General
-# =========================
+# Build output
+/build/
+/bin/
+/obj/
+/artifacts/
+
+# VS Code user state
+.vscode/*.log
+.vscode/*.code-workspace
+
+# CMake
+CMakeUserPresets.json
+cmake-build-*/
+
+# OS files
 .DS_Store
 Thumbs.db
-*.log
-*.tmp
 
-# =========================
-# Build artifacts
-# =========================
-build/
-out/
-bin/
-obj/
+# Native/managed outputs
+src/dotnet/Vyre.App/bin/
+src/dotnet/Vyre.App/obj/
+src/dotnet/Vyre.App.Core/bin/
+src/dotnet/Vyre.App.Core/obj/
 
-# =========================
-# CMake
-# =========================
-CMakeFiles/
-CMakeCache.txt
-cmake_install.cmake
-*.cmake.user
-*.ninja
-.ninja_deps
-.ninja_log
-
-# =========================
-# MSVC / Visual Studio
-# =========================
-.vs/
-*.vcxproj*
-*.sln.docstates
-
-# =========================
-# .NET / MAUI
-# =========================
-**/bin/
-**/obj/
-**/.vs/
-
-# MAUI platform outputs
-**/Platforms/**/bin/
-**/Platforms/**/obj/
-
-# =========================
-# NuGet
-# =========================
-.nuget/
-packages/
-
-# =========================
-# Native runtime copies
-# (built DLLs copied for P/Invoke)
-# =========================
-wifi-ui-maui/**/wifi-interop.dll
-
-# =========================
-# Test outputs
-# =========================
-TestResults/
-
-# =========================
-# IDEs
-# =========================
-.idea/
-.vscode/
+.fake

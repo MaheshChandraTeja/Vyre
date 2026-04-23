@@ -1,0 +1,148 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "bootstrap",
+      "type": "shell",
+      "command": "pwsh",
+      "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}/scripts/bootstrap.ps1"],
+      "windows": {
+        "command": "pwsh"
+      },
+      "osx": {
+        "command": "bash",
+        "args": ["${workspaceFolder}/scripts/bootstrap.sh"]
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "native:configure:host",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--preset", "windows-debug"],
+      "windows": {
+        "args": ["--preset", "windows-debug"]
+      },
+      "osx": {
+        "args": ["--preset", "macos-debug"]
+      },
+      "linux": {
+        "args": ["--preset", "linux-debug"]
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "native:build:host",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "--preset", "windows-debug"],
+      "windows": {
+        "args": ["--build", "--preset", "windows-debug"]
+      },
+      "osx": {
+        "args": ["--build", "--preset", "macos-debug"]
+      },
+      "linux": {
+        "args": ["--build", "--preset", "linux-debug"]
+      },
+      "dependsOn": ["native:configure:host"],
+      "problemMatcher": ["$msCompile", "$gcc"]
+    },
+    {
+      "label": "native:test:host",
+      "type": "shell",
+      "command": "ctest",
+      "args": ["--preset", "windows-debug"],
+      "windows": {
+        "args": ["--preset", "windows-debug"]
+      },
+      "osx": {
+        "args": ["--preset", "macos-debug"]
+      },
+      "linux": {
+        "args": ["--preset", "linux-debug"]
+      },
+      "dependsOn": ["native:build:host"],
+      "problemMatcher": []
+    },
+    {
+      "label": "native:build:android",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "--preset", "android-arm64-debug"],
+      "dependsOn": [
+        {
+          "task": "native:configure:android",
+          "dependsOrder": "sequence"
+        }
+      ],
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "native:configure:android",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--preset", "android-arm64-debug"],
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "native:build:ios-sim",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "--preset", "ios-sim-debug"],
+      "osx": {
+        "command": "cmake",
+        "args": ["--build", "--preset", "ios-sim-debug"]
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "dotnet:restore",
+      "type": "shell",
+      "command": "dotnet",
+      "args": ["restore", "${workspaceFolder}/Vyre.sln"],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "dotnet:workload:restore",
+      "type": "shell",
+      "command": "dotnet",
+      "args": ["workload", "restore", "${workspaceFolder}/src/dotnet/Vyre.App/Vyre.App.csproj"],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "maui:build:debug",
+      "type": "shell",
+      "command": "dotnet",
+      "args": ["build", "${workspaceFolder}/Vyre.sln", "-c", "Debug"],
+      "dependsOn": ["dotnet:restore", "dotnet:workload:restore"],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "maui:build:android",
+      "type": "shell",
+      "command": "dotnet",
+      "args": ["build", "${workspaceFolder}/src/dotnet/Vyre.App/Vyre.App.csproj", "-f", "net10.0-android", "-c", "Debug"],
+      "dependsOn": ["dotnet:restore", "dotnet:workload:restore"],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "maui:build:ios",
+      "type": "shell",
+      "command": "dotnet",
+      "args": ["build", "${workspaceFolder}/src/dotnet/Vyre.App/Vyre.App.csproj", "-f", "net10.0-ios", "-c", "Debug"],
+      "dependsOn": ["dotnet:restore", "dotnet:workload:restore"],
+      "osx": {
+        "command": "dotnet",
+        "args": ["build", "${workspaceFolder}/src/dotnet/Vyre.App/Vyre.App.csproj", "-f", "net10.0-ios", "-c", "Debug"]
+      },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "validate:local",
+      "dependsOrder": "sequence",
+      "dependsOn": ["native:test:host", "maui:build:debug"],
+      "problemMatcher": []
+    }
+  ]
+}

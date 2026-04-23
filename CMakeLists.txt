@@ -1,39 +1,39 @@
-cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 3.26)
 
 project(Vyre
-  VERSION 0.1.0
-  DESCRIPTION "Vyre - wifi-core + interop + MAUI UI"
-  LANGUAGES CXX
+    VERSION 0.1.0
+    DESCRIPTION "Vyre native engine and interop"
+    LANGUAGES CXX
 )
+
+option(VYRE_BUILD_TESTS "Build native test targets" ON)
+option(VYRE_BUILD_INTEROP "Build the C ABI interop layer" ON)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-include(CTest)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/artifacts/lib")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/artifacts/bin")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/artifacts/bin")
 
-# Keep output predictable
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-include(CompilerWarnings)
-include(Sanitizers)
-include(StaticAnalysis)
-
-option(VYRE_ENABLE_SANITIZERS "Enable ASan/UBSan where supported" OFF)
-option(VYRE_ENABLE_TIDY "Enable clang-tidy (if available)" OFF)
-option(VYRE_BUILD_SHARED "Build shared libs (useful for interop)" ON)
-
-add_subdirectory(wifi-core)
-add_subdirectory(wifi-interop)
-add_subdirectory(tests)
-
-if(VYRE_ENABLE_SANITIZERS)
-  vyre_enable_sanitizers()
+if(MSVC)
+    add_compile_options(/permissive- /W4 /EHsc /Zc:__cplusplus)
+    add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
+else()
+    add_compile_options(-Wall -Wextra -Wpedantic -Wconversion -Wshadow -Wnon-virtual-dtor)
 endif()
 
-if(VYRE_ENABLE_TIDY)
-  vyre_enable_clang_tidy()
+add_subdirectory(src/native/vyre-core)
+
+if(VYRE_BUILD_INTEROP)
+    add_subdirectory(src/native/vyre-interop)
+endif()
+
+if(VYRE_BUILD_TESTS)
+    include(CTest)
+    enable_testing()
+    add_subdirectory(src/native/tests)
 endif()

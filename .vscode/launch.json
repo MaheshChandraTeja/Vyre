@@ -1,0 +1,36 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Vyre (.NET MAUI)",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/src/dotnet/Vyre.App/Vyre.App.csproj",
+      "preLaunchTask": "maui:build:debug"
+    },
+    {
+      "name": "Debug Vyre Native Smoke Tests (Windows)",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/windows-debug/artifacts/bin/vyre-native-smoke-tests.exe",
+      "cwd": "${workspaceFolder}/build/windows-debug/artifacts/bin",
+      "preLaunchTask": "native:build:host",
+      "stopAtEntry": false
+    },
+    {
+      "name": "Debug Vyre Native Smoke Tests (macOS/Linux)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/macos-debug/artifacts/bin/vyre-native-smoke-tests",
+      "cwd": "${workspaceFolder}/build/macos-debug/artifacts/bin",
+      "preLaunchTask": "native:build:host",
+      "MIMode": "lldb",
+      "stopAtEntry": false,
+      "linux": {
+        "program": "${workspaceFolder}/build/linux-debug/artifacts/bin/vyre-native-smoke-tests",
+        "cwd": "${workspaceFolder}/build/linux-debug/artifacts/bin",
+        "MIMode": "gdb"
+      }
+    }
+  ]
+}

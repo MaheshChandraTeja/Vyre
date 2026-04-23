@@ -1,2 +1,0 @@
-#pragma once
-#define WIFI_CORE_VERSION "@PROJECT_VERSION@"
