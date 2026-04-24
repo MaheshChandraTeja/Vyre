@@ -23,3 +23,12 @@ src/dotnet/Vyre.App.Core/bin/
 src/dotnet/Vyre.App.Core/obj/
 
 .vscode/
+
+# Android signing keys
+*.keystore
+*.jks
+*.p12
+*.key
+
+# Vyre release signing key
+src/dotnet/Vyre.App/vyre-release.keystore
