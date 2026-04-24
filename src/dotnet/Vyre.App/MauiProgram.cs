@@ -1,6 +1,10 @@
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Hosting;
+#if WINDOWS
+using Microsoft.Maui.LifecycleEvents;
+using Vyre.App.Platforms.Windows;
+#endif
 using Vyre.App.Pages;
 using Vyre.App.Services;
 using Vyre.App.Services.Engine;
@@ -24,12 +28,21 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
+#if WINDOWS
+        builder.ConfigureLifecycleEvents(events =>
+        {
+            events.AddWindows(windows =>
+            {
+                windows.OnWindowCreated(WindowsWindowChrome.Apply);
+            });
+        });
+#endif
+
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
 
         builder.Services.AddSingleton<ISettingsService, SettingsService>();
-        builder.Services.AddSingleton<IReportsStorageService, ReportsStorageService>();
         builder.Services.AddSingleton<IDummyWifiDataService, DummyWifiDataService>();
         builder.Services.AddSingleton<IDoctorService, DoctorService>();
         builder.Services.AddSingleton<IVyreEngineService, VyreEngineService>();

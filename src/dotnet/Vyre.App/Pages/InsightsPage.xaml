@@ -12,170 +12,442 @@
     BackgroundColor="{StaticResource PageBackgroundColor}">
 
     <ScrollView BackgroundColor="{StaticResource PageBackgroundColor}">
-        <VerticalStackLayout Padding="20,18,20,28"
+        <VerticalStackLayout Padding="18,18,18,104"
                              Spacing="18"
                              BackgroundColor="{StaticResource PageBackgroundColor}">
 
-            <!-- Header -->
-            <VerticalStackLayout Spacing="6">
-                <HorizontalStackLayout Spacing="10"
-                       VerticalOptions="Center">
+            <Border Padding="16"
+                    StrokeShape="RoundRectangle 30"
+                    Stroke="#253650"
+                    StrokeThickness="1"
+                    BackgroundColor="#0B1220">
+                <VerticalStackLayout Spacing="16">
+                    <Grid ColumnDefinitions="Auto,*"
+                          ColumnSpacing="14">
+                        <Border Grid.Column="0"
+                                WidthRequest="58"
+                                HeightRequest="58"
+                                Padding="12"
+                                StrokeShape="RoundRectangle 20"
+                                Stroke="#2B3B55"
+                                StrokeThickness="1"
+                                BackgroundColor="#122035"
+                                VerticalOptions="Start">
+                            <Image Source="insights.png"
+                                   Aspect="AspectFit">
+                                <Image.Behaviors>
+                                    <toolkit:IconTintColorBehavior TintColor="#F8FAFC" />
+                                </Image.Behaviors>
+                            </Image>
+                        </Border>
 
-                     <Image Source="insights.png"
-                            WidthRequest="38"
-                            HeightRequest="38"
-                            VerticalOptions="Center"
-                            Aspect="AspectFit">
-                            <Image.Behaviors>
-                            <toolkit:IconTintColorBehavior TintColor="#F8FAFC" />
-                            </Image.Behaviors>
-                     </Image>
+                        <VerticalStackLayout Grid.Column="1"
+                                             Spacing="4"
+                                             VerticalOptions="Center">
+                            <Label Text="Insight Engine"
+                                   FontSize="27"
+                                   FontAttributes="Bold"
+                                   TextColor="#F8FAFC"
+                                   LineBreakMode="TailTruncation" />
+                            <Label Text="{Binding SummaryMessage}"
+                                   FontSize="13"
+                                   TextColor="#94A3B8"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </Grid>
 
-                     <Label Text="Insights"
-                            VerticalOptions="Center"
-                            Style="{StaticResource PageTitleLabelStyle}" />
+                    <Grid ColumnDefinitions="Auto,*"
+                          ColumnSpacing="14">
+                        <Border Grid.Column="0"
+                                WidthRequest="86"
+                                HeightRequest="86"
+                                StrokeShape="RoundRectangle 28"
+                                Stroke="#164E63"
+                                StrokeThickness="1"
+                                BackgroundColor="#082F49">
+                            <VerticalStackLayout Spacing="0"
+                                                 HorizontalOptions="Center"
+                                                 VerticalOptions="Center">
+                                <Label Text="{Binding HealthScoreText}"
+                                       FontSize="22"
+                                       FontAttributes="Bold"
+                                       TextColor="#7DD3FC"
+                                       HorizontalTextAlignment="Center" />
+                                <Label Text="score"
+                                       FontSize="11"
+                                       TextColor="#BAE6FD"
+                                       HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+                        </Border>
 
-                     </HorizontalStackLayout>
+                        <VerticalStackLayout Grid.Column="1"
+                                             Spacing="5"
+                                             VerticalOptions="Center">
+                            <Label Text="{Binding PostureLabel}"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="#F8FAFC" />
+                            <Label Text="{Binding PostureDetail}"
+                                   FontSize="13"
+                                   TextColor="#CBD5E1"
+                                   LineBreakMode="WordWrap" />
+                            <Label Text="{Binding LastScanText}"
+                                   FontSize="11"
+                                   TextColor="#64748B" />
+                        </VerticalStackLayout>
+                    </Grid>
 
-                <Label Text="{Binding SummaryMessage}"
-                       Style="{StaticResource PageSubtitleLabelStyle}" />
-            </VerticalStackLayout>
-
-            <!-- Refresh Card -->
-            <Frame>
-                <VerticalStackLayout Spacing="14">
-
-                    <Label Text="Network health"
-                           FontSize="20"
-                           FontAttributes="Bold" />
-
-                    <Label Text="Review risks, warnings, and practical fixes from the latest scan."
-                           Style="{StaticResource MetaLabelStyle}"
-                           LineBreakMode="WordWrap" />
-
-                    <Button Text="Refresh Insights"
-                            Command="{Binding RefreshCommand}" />
-
+                    <Button Text="Refresh insights"
+                            Command="{Binding RefreshCommand}"
+                            HeightRequest="50"
+                            CornerRadius="22"
+                            FontAttributes="Bold"
+                            BackgroundColor="#38BDF8"
+                            TextColor="#020617" />
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
 
-            <Label Text="{Binding ErrorMessage}"
-                   TextColor="{StaticResource DangerColor}" />
+            <Border Padding="16"
+                    StrokeShape="RoundRectangle 24"
+                    Stroke="#253650"
+                    StrokeThickness="1"
+                    BackgroundColor="#0B1220"
+                    IsVisible="{Binding HasNoScan}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="No evidence yet"
+                           FontSize="21"
+                           FontAttributes="Bold"
+                           TextColor="#F8FAFC" />
+                    <Label Text="Run a scan first. Insights are generated from observed access points, platform warnings, signal shape, channel use, and identity metadata."
+                           FontSize="14"
+                           TextColor="#CBD5E1"
+                           LineBreakMode="WordWrap" />
+                </VerticalStackLayout>
+            </Border>
 
-            <ActivityIndicator IsRunning="{Binding IsBusy}"
-                               IsVisible="{Binding IsBusy}" />
+            <VerticalStackLayout Spacing="18"
+                                 IsVisible="{Binding HasInsights}">
 
-            <!-- Issues -->
-            <Label Text="Issues"
-                   FontSize="24"
-                   FontAttributes="Bold"
-                   Margin="0,10,0,0" />
-
-            <CollectionView ItemsSource="{Binding Issues}"
-                            SelectionMode="None">
-                <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical"
-                                       ItemSpacing="14" />
-                </CollectionView.ItemsLayout>
-
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:InsightIssue">
-                        <Frame Style="{StaticResource MetricCardStyle}">
-                            <VerticalStackLayout Spacing="12">
-
-                                <Grid ColumnDefinitions="*,Auto"
-                                      ColumnSpacing="12">
-
-                                    <VerticalStackLayout Grid.Column="0"
+                <FlexLayout BindableLayout.ItemsSource="{Binding OverviewCards}"
+                            Direction="Row"
+                            Wrap="Wrap"
+                            AlignItems="Stretch">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:InsightMetricCard">
+                            <Border Padding="13"
+                                    Margin="0,0,10,10"
+                                    WidthRequest="160"
+                                    StrokeShape="RoundRectangle 22"
+                                    Stroke="#1E293B"
+                                    StrokeThickness="1"
+                                    BackgroundColor="#0F172A"
+                                    FlexLayout.Grow="1">
+                                <Grid ColumnDefinitions="4,*"
+                                      ColumnSpacing="10">
+                                    <BoxView Grid.Column="0"
+                                             WidthRequest="4"
+                                             CornerRadius="2"
+                                             Color="{Binding AccentHex}" />
+                                    <VerticalStackLayout Grid.Column="1"
                                                          Spacing="4">
-                                        <HorizontalStackLayout Spacing="8">
-                                            <Label Text="{Binding Rank, StringFormat='#{0}'}"
-                                                   Style="{StaticResource MetaLabelStyle}"
-                                                   VerticalOptions="Center" />
+                                        <Label Text="{Binding Label}"
+                                               FontSize="11"
+                                               TextColor="#64748B" />
+                                        <Label Text="{Binding Value}"
+                                               FontSize="17"
+                                               FontAttributes="Bold"
+                                               TextColor="#F8FAFC"
+                                               LineBreakMode="TailTruncation" />
+                                        <Label Text="{Binding Detail}"
+                                               FontSize="11"
+                                               TextColor="#94A3B8"
+                                               LineBreakMode="WordWrap" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
 
+                <Grid ColumnDefinitions="*,Auto"
+                      ColumnSpacing="12"
+                      Margin="2,4,0,-4">
+                    <VerticalStackLayout Grid.Column="0"
+                                         Spacing="2">
+                        <Label Text="Findings"
+                               FontSize="23"
+                               FontAttributes="Bold"
+                               TextColor="#F8FAFC" />
+                        <Label Text="Ranked RF, security, channel, identity, and platform signals."
+                               FontSize="12"
+                               TextColor="#64748B"
+                               LineBreakMode="WordWrap" />
+                    </VerticalStackLayout>
+
+                    <Border Grid.Column="1"
+                            Padding="10,6"
+                            StrokeShape="RoundRectangle 16"
+                            Stroke="#334155"
+                            StrokeThickness="1"
+                            BackgroundColor="#111827"
+                            VerticalOptions="Center">
+                        <Label Text="{Binding CriticalOrHighCount, StringFormat='{}{0} urgent'}"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#FCA5A5" />
+                    </Border>
+                </Grid>
+
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Issues}"
+                                     Spacing="12">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:InsightIssue">
+                            <Border Padding="15"
+                                    StrokeShape="RoundRectangle 26"
+                                    Stroke="#253650"
+                                    StrokeThickness="1"
+                                    BackgroundColor="#0B1220">
+                                <Grid ColumnDefinitions="4,*"
+                                      ColumnSpacing="12">
+                                    <BoxView Grid.Column="0"
+                                             WidthRequest="4"
+                                             CornerRadius="2"
+                                             Color="{Binding SeverityColorHex}" />
+
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         Spacing="11">
+                                        <Grid ColumnDefinitions="*,Auto"
+                                              ColumnSpacing="10">
+                                            <VerticalStackLayout Grid.Column="0"
+                                                                 Spacing="3">
+                                                <HorizontalStackLayout Spacing="8">
+                                                    <Label Text="{Binding Rank, StringFormat='#{0}'}"
+                                                           FontSize="12"
+                                                           FontAttributes="Bold"
+                                                           TextColor="#64748B" />
+                                                    <Label Text="{Binding CategoryLabel}"
+                                                           FontSize="12"
+                                                           FontAttributes="Bold"
+                                                           TextColor="#38BDF8" />
+                                                </HorizontalStackLayout>
+                                                <Label Text="{Binding Title}"
+                                                       FontSize="18"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#F8FAFC"
+                                                       LineBreakMode="WordWrap" />
+                                            </VerticalStackLayout>
+
+                                            <Border Grid.Column="1"
+                                                    Padding="9,5"
+                                                    StrokeShape="RoundRectangle 14"
+                                                    StrokeThickness="0"
+                                                    BackgroundColor="{Binding SeverityBackgroundHex}"
+                                                    VerticalOptions="Start">
+                                                <Label Text="{Binding SeverityLabel}"
+                                                       FontSize="11"
+                                                       FontAttributes="Bold"
+                                                       TextColor="{Binding SeverityColorHex}" />
+                                            </Border>
+                                        </Grid>
+
+                                        <Label Text="{Binding Description}"
+                                               FontSize="14"
+                                               TextColor="#CBD5E1"
+                                               LineBreakMode="WordWrap" />
+
+                                        <Border Padding="12"
+                                                StrokeShape="RoundRectangle 18"
+                                                Stroke="#1E293B"
+                                                StrokeThickness="1"
+                                                BackgroundColor="#111827"
+                                                IsVisible="{Binding HasEvidence}">
+                                            <VerticalStackLayout Spacing="4">
+                                                <Label Text="Evidence"
+                                                       FontSize="11"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#64748B" />
+                                                <Label Text="{Binding Evidence}"
+                                                       FontSize="13"
+                                                       TextColor="#E2E8F0"
+                                                       LineBreakMode="WordWrap" />
+                                            </VerticalStackLayout>
+                                        </Border>
+
+                                        <Border Padding="12"
+                                                StrokeShape="RoundRectangle 18"
+                                                Stroke="#1E293B"
+                                                StrokeThickness="1"
+                                                BackgroundColor="#101826"
+                                                IsVisible="{Binding HasFixSteps}">
+                                            <VerticalStackLayout Spacing="4">
+                                                <Label Text="Next move"
+                                                       FontSize="11"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#64748B" />
+                                                <Label Text="{Binding FixSteps}"
+                                                       FontSize="13"
+                                                       TextColor="#E2E8F0"
+                                                       LineBreakMode="WordWrap" />
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <Grid ColumnDefinitions="*,Auto"
+                      ColumnSpacing="12"
+                      Margin="2,8,0,-4">
+                    <VerticalStackLayout Grid.Column="0"
+                                         Spacing="2">
+                        <Label Text="Recommendations"
+                               FontSize="23"
+                               FontAttributes="Bold"
+                               TextColor="#F8FAFC" />
+                        <Label Text="Prioritized moves with action, evidence, impact, and effort."
+                               FontSize="12"
+                               TextColor="#64748B"
+                               LineBreakMode="WordWrap" />
+                    </VerticalStackLayout>
+
+                    <Border Grid.Column="1"
+                            Padding="10,6"
+                            StrokeShape="RoundRectangle 16"
+                            Stroke="#334155"
+                            StrokeThickness="1"
+                            BackgroundColor="#111827"
+                            VerticalOptions="Center">
+                        <Label Text="{Binding RecommendationCount, StringFormat='{}{0} actions'}"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#A78BFA" />
+                    </Border>
+                </Grid>
+
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Recommendations}"
+                                     Spacing="12">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:InsightRecommendation">
+                            <Border Padding="15"
+                                    StrokeShape="RoundRectangle 26"
+                                    Stroke="#253650"
+                                    StrokeThickness="1"
+                                    BackgroundColor="#0B1220">
+                                <VerticalStackLayout Spacing="12">
+                                    <Grid ColumnDefinitions="*,Auto"
+                                          ColumnSpacing="10">
+                                        <VerticalStackLayout Grid.Column="0"
+                                                             Spacing="3">
+                                            <Label Text="{Binding CategoryLabel}"
+                                                   FontSize="12"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#38BDF8" />
                                             <Label Text="{Binding Title}"
                                                    FontSize="18"
                                                    FontAttributes="Bold"
-                                                   LineBreakMode="WordWrap"
-                                                   VerticalOptions="Center" />
-                                        </HorizontalStackLayout>
+                                                   TextColor="#F8FAFC"
+                                                   LineBreakMode="WordWrap" />
+                                        </VerticalStackLayout>
 
-                                        <Label Text="{Binding Description}"
-                                               FontSize="15"
-                                               LineBreakMode="WordWrap" />
-                                    </VerticalStackLayout>
+                                        <Border Grid.Column="1"
+                                                Padding="10,6"
+                                                StrokeShape="RoundRectangle 16"
+                                                StrokeThickness="0"
+                                                BackgroundColor="{Binding PriorityBackgroundHex}"
+                                                VerticalOptions="Start">
+                                            <Label Text="{Binding PriorityLabel}"
+                                                   FontSize="12"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{Binding PriorityColorHex}" />
+                                        </Border>
+                                    </Grid>
 
-                                    <Label Grid.Column="1"
-                                           Text="{Binding Severity}"
-                                           FontSize="15"
-                                           FontAttributes="Bold"
-                                           TextColor="{StaticResource AccentSoftColor}"
-                                           VerticalOptions="Start"
-                                           HorizontalTextAlignment="End" />
-                                </Grid>
-
-                                <VerticalStackLayout Spacing="4">
-                                    <Label Text="Code"
-                                           Style="{StaticResource MetaLabelStyle}" />
-
-                                    <Label Text="{Binding Code}"
-                                           Style="{StaticResource MetaLabelStyle}" />
-                                </VerticalStackLayout>
-
-                            </VerticalStackLayout>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-
-            <!-- Recommendations -->
-            <Label Text="Recommendations"
-                   FontSize="24"
-                   FontAttributes="Bold"
-                   Margin="0,10,0,0" />
-
-            <CollectionView ItemsSource="{Binding Recommendations}"
-                            SelectionMode="None">
-                <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical"
-                                       ItemSpacing="14" />
-                </CollectionView.ItemsLayout>
-
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:InsightRecommendation">
-                        <Frame Style="{StaticResource MetricCardStyle}">
-                            <VerticalStackLayout Spacing="12">
-
-                                <Grid ColumnDefinitions="*,Auto"
-                                      ColumnSpacing="12">
-
-                                    <Label Grid.Column="0"
-                                           Text="{Binding Title}"
-                                           FontSize="18"
-                                           FontAttributes="Bold"
+                                    <Label Text="{Binding Description}"
+                                           FontSize="14"
+                                           TextColor="#CBD5E1"
                                            LineBreakMode="WordWrap" />
 
-                                    <Label Grid.Column="1"
-                                           Text="{Binding Priority}"
-                                           FontSize="15"
-                                           FontAttributes="Bold"
-                                           TextColor="{StaticResource AccentSoftColor}"
-                                           HorizontalTextAlignment="End" />
-                                </Grid>
+                                    <Border Padding="12"
+                                            StrokeShape="RoundRectangle 18"
+                                            Stroke="#1E293B"
+                                            StrokeThickness="1"
+                                            BackgroundColor="#111827"
+                                            IsVisible="{Binding HasAction}">
+                                        <VerticalStackLayout Spacing="4">
+                                            <Label Text="Action"
+                                                   FontSize="11"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#64748B" />
+                                            <Label Text="{Binding Action}"
+                                                   FontSize="13"
+                                                   TextColor="#E2E8F0"
+                                                   LineBreakMode="WordWrap" />
+                                        </VerticalStackLayout>
+                                    </Border>
 
-                                <Label Text="{Binding Description}"
-                                       Style="{StaticResource MetaLabelStyle}"
-                                       LineBreakMode="WordWrap" />
+                                    <Grid ColumnDefinitions="*,*"
+                                          ColumnSpacing="10">
+                                        <Border Grid.Column="0"
+                                                Padding="11"
+                                                StrokeShape="RoundRectangle 18"
+                                                Stroke="#1E293B"
+                                                StrokeThickness="1"
+                                                BackgroundColor="#111827"
+                                                IsVisible="{Binding HasImpact}">
+                                            <VerticalStackLayout Spacing="3">
+                                                <Label Text="Impact"
+                                                       FontSize="11"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#64748B" />
+                                                <Label Text="{Binding Impact}"
+                                                       FontSize="12"
+                                                       TextColor="#CBD5E1"
+                                                       LineBreakMode="WordWrap" />
+                                            </VerticalStackLayout>
+                                        </Border>
 
-                                <Label Text="{Binding Id}"
-                                       Style="{StaticResource MetaLabelStyle}" />
+                                        <Border Grid.Column="1"
+                                                Padding="11"
+                                                StrokeShape="RoundRectangle 18"
+                                                Stroke="#1E293B"
+                                                StrokeThickness="1"
+                                                BackgroundColor="#111827"
+                                                IsVisible="{Binding HasEffort}">
+                                            <VerticalStackLayout Spacing="3">
+                                                <Label Text="Effort"
+                                                       FontSize="11"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#64748B" />
+                                                <Label Text="{Binding Effort}"
+                                                       FontSize="12"
+                                                       TextColor="#CBD5E1"
+                                                       LineBreakMode="WordWrap" />
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </Grid>
 
-                            </VerticalStackLayout>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                                    <Label Text="{Binding Evidence}"
+                                           FontSize="12"
+                                           TextColor="#64748B"
+                                           LineBreakMode="WordWrap"
+                                           IsVisible="{Binding HasEvidence}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
 
+            <Label Text="{Binding ErrorMessage}"
+                   TextColor="{StaticResource DangerColor}"
+                   FontSize="13"
+                   LineBreakMode="WordWrap" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               Color="#38BDF8" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

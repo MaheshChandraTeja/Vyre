@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:Vyre.App.Pages"
     FlyoutBehavior="Disabled"
-    Title="Vyre"
+    Title=""
     BackgroundColor="{StaticResource PageBackgroundColor}"
     Shell.ForegroundColor="{StaticResource PrimaryTextColor}"
     Shell.TitleColor="{StaticResource PrimaryTextColor}"
@@ -15,7 +15,8 @@
     Shell.TabBarForegroundColor="{StaticResource PrimaryTextColor}"
     Shell.TabBarTitleColor="{StaticResource PrimaryTextColor}"
     Shell.TabBarUnselectedColor="{StaticResource SecondaryTextColor}"
-    Shell.NavBarHasShadow="False">
+    Shell.NavBarHasShadow="False"
+    Shell.NavBarIsVisible="False">
 
     <TabBar>
 

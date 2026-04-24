@@ -1,14 +1,17 @@
 using System.Collections.ObjectModel;
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Vyre.App.Models;
-using Vyre.App.Services;
+using Vyre.App.Services.Reports;
 
 namespace Vyre.App.ViewModels;
 
 public sealed partial class ReportsViewModel : BaseViewModel, IDisposable
 {
-    private readonly IReportsStorageService _reportsStorageService;
+    private static readonly CultureInfo InvariantCulture = CultureInfo.InvariantCulture;
+
+    private readonly IReportArchiveService _reportArchiveService;
     private readonly SemaphoreSlim _gate = new(1, 1);
 
     public ObservableCollection<ReportSummary> Reports { get; } = new();
@@ -16,17 +19,18 @@ public sealed partial class ReportsViewModel : BaseViewModel, IDisposable
     [ObservableProperty]
     private string selectedReportJson = "{}";
 
+    [ObservableProperty]
+    private bool hasReports;
+
     public IAsyncRelayCommand RefreshCommand { get; }
-    public IAsyncRelayCommand AddDummyReportCommand { get; }
     public IAsyncRelayCommand<ReportSummary> OpenReportCommand { get; }
 
-    public ReportsViewModel(IReportsStorageService reportsStorageService)
+    public ReportsViewModel(IReportArchiveService reportArchiveService)
     {
-        _reportsStorageService = reportsStorageService;
+        _reportArchiveService = reportArchiveService;
         Title = "Reports";
 
         RefreshCommand = new AsyncRelayCommand(LoadAsync);
-        AddDummyReportCommand = new AsyncRelayCommand(AddDummyReportAsync);
         OpenReportCommand = new AsyncRelayCommand<ReportSummary>(OpenReportAsync);
     }
 
@@ -51,20 +55,29 @@ public sealed partial class ReportsViewModel : BaseViewModel, IDisposable
             ErrorMessage = null;
 
             using var cts = new CancellationTokenSource();
-            var items = await _reportsStorageService.GetHistoryAsync(cts.Token);
+            var items = (await _reportArchiveService.ListAsync(cts.Token))
+                .OrderByDescending(x => x.CapturedAtUtc)
+                .Select(ToSummary)
+                .ToList();
 
-            MainThread.BeginInvokeOnMainThread(() =>
+            await MainThread.InvokeOnMainThreadAsync(() =>
             {
                 Reports.Clear();
                 foreach (var item in items)
                 {
                     Reports.Add(item);
                 }
+
+                HasReports = Reports.Count > 0;
             });
 
-            if (Reports.Count > 0)
+            if (items.Count > 0)
             {
-                await OpenReportAsync(Reports[0]);
+                await OpenReportAsync(items[0]);
+            }
+            else
+            {
+                SelectedReportJson = "{}";
             }
         }
         catch (Exception ex)
@@ -78,28 +91,6 @@ public sealed partial class ReportsViewModel : BaseViewModel, IDisposable
         }
     }
 
-    private async Task AddDummyReportAsync()
-    {
-        try
-        {
-            IsBusy = true;
-            using var cts = new CancellationTokenSource();
-
-            var report = await _reportsStorageService.AddDummyReportAsync(cts.Token);
-
-            MainThread.BeginInvokeOnMainThread(() => Reports.Insert(0, report));
-            await OpenReportAsync(report);
-        }
-        catch (Exception ex)
-        {
-            ErrorMessage = $"Failed to create report: {ex.Message}";
-        }
-        finally
-        {
-            IsBusy = false;
-        }
-    }
-
     private async Task OpenReportAsync(ReportSummary? report)
     {
         if (report is null)
@@ -110,12 +101,29 @@ public sealed partial class ReportsViewModel : BaseViewModel, IDisposable
         try
         {
             using var cts = new CancellationTokenSource();
-            SelectedReportJson = await _reportsStorageService.ReadReportJsonAsync(report.JsonPath, cts.Token);
+            SelectedReportJson = await _reportArchiveService.ReadReportJsonAsync(report.Id, cts.Token);
         }
         catch (Exception ex)
         {
             ErrorMessage = $"Failed to read report JSON: {ex.Message}";
         }
+    }
+
+    private static ReportSummary ToSummary(SavedReportRecord record)
+    {
+        var platform = string.IsNullOrWhiteSpace(record.SourcePlatform)
+            ? "Scan"
+            : record.SourcePlatform.Trim();
+
+        return new ReportSummary
+        {
+            Id = record.Id,
+            CreatedUtc = record.CapturedAtUtc,
+            Title = string.Create(InvariantCulture, $"{platform} scan"),
+            NetworkCount = record.AccessPointCount,
+            IssueCount = record.IssueCount,
+            JsonPath = record.JsonPath
+        };
     }
 
     public void Dispose()

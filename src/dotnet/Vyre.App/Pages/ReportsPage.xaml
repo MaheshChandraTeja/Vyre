@@ -94,10 +94,6 @@
                                     HeightRequest="56"
                                     CornerRadius="22"
                                     FontAttributes="Bold" />
-
-                            <Button Text="Create Dummy Report"
-                                    Command="{Binding AddDummyReportCommand}"
-                                    IsVisible="False" />
                         </VerticalStackLayout>
                     </Frame>
 
@@ -118,6 +114,28 @@
 
                 </VerticalStackLayout>
             </CollectionView.Header>
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout Padding="24,4,24,32"
+                                     Spacing="12">
+                    <Frame Padding="20"
+                           CornerRadius="26"
+                           HasShadow="False"
+                           BackgroundColor="#0B1220"
+                           BorderColor="#26324A">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="No saved reports yet"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="#F8FAFC" />
+                            <Label Text="Run a scan from the Scan tab. Vyre will archive the analyzed report here automatically."
+                                   FontSize="14"
+                                   TextColor="#AAB7CC"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:ReportSummary">

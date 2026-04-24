@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Vyre.App.Models;
+using Vyre.App.Services.Analysis;
 using Vyre.App.Services.Engine;
 
 namespace Vyre.App.Services.Wifi;
@@ -18,17 +19,20 @@ public sealed partial class WifiScanService : IWifiScanService
     private readonly IPlatformWifiScanProvider _platformWifiScanProvider;
     private readonly IVyreEngineService _engineService;
     private readonly IScanSessionStore _scanSessionStore;
+    private readonly IAnalysisReportStore _analysisReportStore;
     private readonly ILogger<WifiScanService> _logger;
 
     public WifiScanService(
         IPlatformWifiScanProvider platformWifiScanProvider,
         IVyreEngineService engineService,
         IScanSessionStore scanSessionStore,
+        IAnalysisReportStore analysisReportStore,
         ILogger<WifiScanService> logger)
     {
         _platformWifiScanProvider = platformWifiScanProvider;
         _engineService = engineService;
         _scanSessionStore = scanSessionStore;
+        _analysisReportStore = analysisReportStore;
         _logger = logger;
     }
 
@@ -51,6 +55,7 @@ public sealed partial class WifiScanService : IWifiScanService
         }
 
         var snapshot = BuildSnapshot(payload, reportJson);
+        await _analysisReportStore.SetLatestAsync(ToAnalysisReport(snapshot), cancellationToken);
         await _scanSessionStore.SetLatestAsync(snapshot, cancellationToken);
         return snapshot;
     }
@@ -83,6 +88,17 @@ public sealed partial class WifiScanService : IWifiScanService
             Recommendations = recommendations
         };
     }
+
+    private static AnalysisReportModel ToAnalysisReport(ScanInsightSnapshot snapshot) =>
+        new()
+        {
+            SourcePlatform = snapshot.SourcePlatform,
+            IsPartial = snapshot.IsPartial,
+            CapabilityMessage = snapshot.CapabilityMessage,
+            Warnings = snapshot.Warnings,
+            AccessPoints = snapshot.AccessPoints,
+            Issues = snapshot.Issues
+        };
 
     private static void TryPopulateFromReportJson(
         string reportJson,

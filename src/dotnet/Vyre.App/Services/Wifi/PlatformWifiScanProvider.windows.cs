@@ -241,7 +241,7 @@ public sealed partial class PlatformWifiScanProvider
         if (output.Contains("wlansvc", StringComparison.OrdinalIgnoreCase) &&
             output.Contains("not running", StringComparison.OrdinalIgnoreCase))
         {
-            return "Windows Wi-Fi scanning needs the WLAN AutoConfig service. Start WLAN AutoConfig and try again.";
+            return "Windows cannot scan Wi-Fi because WLAN AutoConfig is stopped. Start WlanSvc from an elevated PowerShell, or use a machine with an enabled Wi-Fi adapter.";
         }
 
         if (output.Contains("no wireless interface", StringComparison.OrdinalIgnoreCase))

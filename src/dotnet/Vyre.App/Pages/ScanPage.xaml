@@ -11,152 +11,491 @@
     Shell.NavBarIsVisible="False"
     BackgroundColor="{StaticResource PageBackgroundColor}">
 
-    <ScrollView BackgroundColor="{StaticResource PageBackgroundColor}">
-        <VerticalStackLayout Padding="20,18,20,28"
-                             Spacing="16"
-                             BackgroundColor="{StaticResource PageBackgroundColor}">
+    <Grid BackgroundColor="{StaticResource PageBackgroundColor}">
 
-            <VerticalStackLayout Spacing="6">
-                <HorizontalStackLayout Spacing="10"
-                                       VerticalOptions="Center">
-                    <Image Source="scan.png"
-                        WidthRequest="38"
-                        HeightRequest="38"
-                        VerticalOptions="Center"
-                        Aspect="AspectFit">
-                        <Image.Behaviors>
-                            <toolkit:IconTintColorBehavior TintColor="#F8FAFC" />
-                        </Image.Behaviors>
-                    </Image>
+        <ScrollView BackgroundColor="{StaticResource PageBackgroundColor}">
+            <VerticalStackLayout Padding="18,16,18,104"
+                                 Spacing="18"
+                                 BackgroundColor="{StaticResource PageBackgroundColor}">
 
-                    <Label Text="Scan"
-                           VerticalOptions="Center"
-                           Style="{StaticResource PageTitleLabelStyle}" />
-                </HorizontalStackLayout>
+                <Border Padding="14"
+                        StrokeShape="RoundRectangle 30"
+                        Stroke="#253650"
+                        StrokeThickness="1"
+                        BackgroundColor="#0B1220">
+                    <VerticalStackLayout Spacing="14">
+                        <Grid ColumnDefinitions="Auto,*"
+                              ColumnSpacing="14">
+                            <Border Grid.Column="0"
+                                    WidthRequest="56"
+                                    HeightRequest="56"
+                                    Padding="12"
+                                    StrokeShape="RoundRectangle 20"
+                                    Stroke="#2B3B55"
+                                    StrokeThickness="1"
+                                    BackgroundColor="#122035"
+                                    VerticalOptions="Start">
+                                <Image Source="scan.png"
+                                       Aspect="AspectFit">
+                                    <Image.Behaviors>
+                                        <toolkit:IconTintColorBehavior TintColor="#F8FAFC" />
+                                    </Image.Behaviors>
+                                </Image>
+                            </Border>
 
-                <Label Text="{Binding ScanMetaText}"
-                       Style="{StaticResource PageSubtitleLabelStyle}" />
-            </VerticalStackLayout>
-
-            <Frame>
-                <VerticalStackLayout Spacing="14">
-                    <SearchBar Placeholder="Search SSID, BSSID, vendor, or security"
-                               Text="{Binding SearchText}" />
-
-                    <Grid ColumnDefinitions="*,*"
-                          ColumnSpacing="12">
-                        <Picker Grid.Column="0"
-                                Title="Sort"
-                                ItemsSource="{Binding SortOptions}"
-                                SelectedItem="{Binding SelectedSort}" />
-
-                        <Picker Grid.Column="1"
-                                Title="Band"
-                                ItemsSource="{Binding BandOptions}"
-                                SelectedItem="{Binding SelectedBand}" />
-                    </Grid>
-
-                    <HorizontalStackLayout Spacing="10">
-                        <CheckBox IsChecked="{Binding ShowOnlyOpenNetworks}" />
-                        <Label VerticalTextAlignment="Center"
-                               Text="Only open networks"
-                               Style="{StaticResource MetaLabelStyle}" />
-                    </HorizontalStackLayout>
-
-                    <Button Text="Refresh Scan"
-                            Command="{Binding RefreshCommand}" />
-                </VerticalStackLayout>
-            </Frame>
-
-            <Label Text="{Binding ErrorMessage}"
-                   TextColor="{StaticResource DangerColor}"
-                   IsVisible="{Binding ErrorMessage}" />
-
-            <ActivityIndicator IsRunning="{Binding IsBusy}"
-                               IsVisible="{Binding IsBusy}" />
-
-            <CollectionView ItemsSource="{Binding AccessPoints}"
-                            SelectionMode="None">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:AccessPointViewData">
-                        <Frame Style="{StaticResource MetricCardStyle}">
-                            <VerticalStackLayout Spacing="12">
-
-                                <Grid ColumnDefinitions="*,Auto"
-                                      ColumnSpacing="12">
-                                    <VerticalStackLayout Grid.Column="0"
-                                                         Spacing="2">
-                                        <Label Text="{Binding Ssid}"
-                                               FontSize="18"
-                                               FontAttributes="Bold" />
-                                        <Label Text="{Binding Bssid}"
-                                               Style="{StaticResource MetaLabelStyle}" />
-                                    </VerticalStackLayout>
-
-                                    <VerticalStackLayout Grid.Column="1"
-                                                         Spacing="2">
-                                        <Label Text="{Binding SignalDbm, StringFormat='{}{0} dBm'}"
-                                               HorizontalTextAlignment="End"
-                                               FontAttributes="Bold"
-                                               TextColor="{StaticResource AccentSoftColor}" />
-                                        <Label Text="{Binding ConfidenceScore, StringFormat='Conf {0:F2}'}"
-                                               HorizontalTextAlignment="End"
-                                               Style="{StaticResource MetaLabelStyle}" />
-                                    </VerticalStackLayout>
-                                </Grid>
-
-                                <Grid ColumnDefinitions="*,*,*"
-                                      ColumnSpacing="10">
-                                    <VerticalStackLayout Spacing="2">
-                                        <Label Text="Band"
-                                               Style="{StaticResource MetaLabelStyle}" />
-                                        <Label Text="{Binding Band}" />
-                                    </VerticalStackLayout>
-
-                                    <VerticalStackLayout Grid.Column="1"
-                                                         Spacing="2">
-                                        <Label Text="Channel"
-                                               Style="{StaticResource MetaLabelStyle}" />
-                                        <Label Text="{Binding Channel, StringFormat='Ch {0}'}" />
-                                    </VerticalStackLayout>
-
-                                    <VerticalStackLayout Grid.Column="2"
-                                                         Spacing="2">
-                                        <Label Text="Frequency"
-                                               Style="{StaticResource MetaLabelStyle}" />
-                                        <Label Text="{Binding FrequencyMhz, StringFormat='{}{0} MHz'}" />
-                                    </VerticalStackLayout>
-                                </Grid>
-
-                                <Grid ColumnDefinitions="*,*,*"
-                                      ColumnSpacing="10">
-                                    <VerticalStackLayout Spacing="2">
-                                        <Label Text="Vendor"
-                                               Style="{StaticResource MetaLabelStyle}" />
-                                        <Label Text="{Binding Vendor}" />
-                                    </VerticalStackLayout>
-
-                                    <VerticalStackLayout Grid.Column="1"
-                                                         Spacing="2">
-                                        <Label Text="Security"
-                                               Style="{StaticResource MetaLabelStyle}" />
-                                        <Label Text="{Binding Security}" />
-                                    </VerticalStackLayout>
-
-                                    <VerticalStackLayout Grid.Column="2"
-                                                         Spacing="2">
-                                        <Label Text="Class"
-                                               Style="{StaticResource MetaLabelStyle}" />
-                                        <Label Text="{Binding SecurityCategory}" />
-                                    </VerticalStackLayout>
-                                </Grid>
-
+                            <VerticalStackLayout Grid.Column="1"
+                                                 Spacing="4"
+                                                 VerticalOptions="Center">
+                                <Label Text="Airspace Scan"
+                                       FontSize="26"
+                                       FontAttributes="Bold"
+                                       TextColor="#F8FAFC"
+                                       LineBreakMode="TailTruncation" />
+                                <Label Text="{Binding ScanMetaText}"
+                                       FontSize="13"
+                                       TextColor="#94A3B8"
+                                       LineBreakMode="TailTruncation" />
                             </VerticalStackLayout>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                        </Grid>
 
-        </VerticalStackLayout>
-    </ScrollView>
+                        <Label Text="Scan nearby access points, filter noise, then tap a network for signal, security, channel, and vendor details."
+                               FontSize="13"
+                               LineBreakMode="WordWrap"
+                               TextColor="#CBD5E1" />
+
+                        <Button Text="Refresh scan"
+                                Command="{Binding RefreshCommand}"
+                                HeightRequest="48"
+                                CornerRadius="22"
+                                FontAttributes="Bold"
+                                BackgroundColor="#38BDF8"
+                                TextColor="#020617" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Padding="12,9"
+                        StrokeShape="RoundRectangle 18"
+                        Stroke="#1E293B"
+                        StrokeThickness="1"
+                        BackgroundColor="#0F172A">
+                    <Label Text="Local-only / Tap cards for dossiers / Signal and security focus"
+                           FontSize="12"
+                           FontAttributes="Bold"
+                           TextColor="#CBD5E1"
+                           LineBreakMode="WordWrap" />
+                </Border>
+
+                <Border Padding="14"
+                        StrokeShape="RoundRectangle 26"
+                        Stroke="#253650"
+                        StrokeThickness="1"
+                        BackgroundColor="#0B1220">
+                    <VerticalStackLayout Spacing="14">
+                        <SearchBar Placeholder="Search SSID, BSSID, vendor, or security"
+                                   Text="{Binding SearchText}"
+                                   HeightRequest="52"
+                                   TextColor="#E2E8F0"
+                                   PlaceholderColor="#64748B"
+                                   CancelButtonColor="#94A3B8"
+                                   BackgroundColor="#111827" />
+
+                        <Grid ColumnDefinitions="*,*"
+                              ColumnSpacing="10">
+                            <Border Grid.Column="0"
+                                    Padding="10,4"
+                                    StrokeShape="RoundRectangle 18"
+                                    Stroke="#1E293B"
+                                    StrokeThickness="1"
+                                    BackgroundColor="#111827">
+                                <Picker Title="Sort"
+                                        ItemsSource="{Binding SortOptions}"
+                                        SelectedItem="{Binding SelectedSort}"
+                                        TextColor="#E2E8F0"
+                                        TitleColor="#64748B" />
+                            </Border>
+
+                            <Border Grid.Column="1"
+                                    Padding="10,4"
+                                    StrokeShape="RoundRectangle 18"
+                                    Stroke="#1E293B"
+                                    StrokeThickness="1"
+                                    BackgroundColor="#111827">
+                                <Picker Title="Band"
+                                        ItemsSource="{Binding BandOptions}"
+                                        SelectedItem="{Binding SelectedBand}"
+                                        TextColor="#E2E8F0"
+                                        TitleColor="#64748B" />
+                            </Border>
+                        </Grid>
+
+                        <HorizontalStackLayout Spacing="8"
+                                               VerticalOptions="Center">
+                            <CheckBox IsChecked="{Binding ShowOnlyOpenNetworks}"
+                                      Color="#38BDF8"
+                                      VerticalOptions="Center" />
+                            <Label Text="Only open networks"
+                                   FontSize="14"
+                                   TextColor="#E2E8F0"
+                                   VerticalTextAlignment="Center" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Label Text="{Binding ErrorMessage}"
+                       TextColor="{StaticResource DangerColor}"
+                       FontSize="13"
+                       LineBreakMode="WordWrap"
+                       IsVisible="{Binding ErrorMessage}" />
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                   IsVisible="{Binding IsBusy}"
+                                   Color="#38BDF8" />
+
+                <Label Text="Detected Networks"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       TextColor="#F8FAFC"
+                       Margin="2,2,0,-4" />
+
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding AccessPoints}"
+                                     Spacing="14">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:AccessPointViewData">
+                            <Border Padding="16"
+                                    StrokeShape="RoundRectangle 28"
+                                    Stroke="#253650"
+                                    StrokeThickness="1"
+                                    BackgroundColor="#0B1220">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnAccessPointTapped" />
+                                </Border.GestureRecognizers>
+
+                                <VerticalStackLayout Spacing="14">
+                                    <Grid ColumnDefinitions="*,Auto"
+                                          ColumnSpacing="12">
+                                        <VerticalStackLayout Grid.Column="0"
+                                                             Spacing="4">
+                                            <Label Text="{Binding Ssid}"
+                                                   FontSize="21"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#F8FAFC"
+                                                   LineBreakMode="TailTruncation" />
+                                            <Label Text="{Binding Bssid}"
+                                                   FontSize="12"
+                                                   TextColor="#94A3B8"
+                                                   LineBreakMode="TailTruncation" />
+                                        </VerticalStackLayout>
+
+                                        <Border Grid.Column="1"
+                                                Padding="12,8"
+                                                StrokeShape="RoundRectangle 18"
+                                                Stroke="#164E63"
+                                                StrokeThickness="1"
+                                                BackgroundColor="#082F49"
+                                                VerticalOptions="Start">
+                                            <Label Text="{Binding SignalDbm, StringFormat='{}{0} dBm'}"
+                                                   FontSize="15"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#7DD3FC" />
+                                        </Border>
+                                    </Grid>
+
+                                    <Grid ColumnDefinitions="*,*"
+                                          RowDefinitions="Auto,Auto"
+                                          ColumnSpacing="10"
+                                          RowSpacing="10">
+                                        <VerticalStackLayout Grid.Row="0"
+                                                             Grid.Column="0"
+                                                             Spacing="2">
+                                            <Label Text="Band"
+                                                   FontSize="11"
+                                                   TextColor="#64748B" />
+                                            <Label Text="{Binding Band}"
+                                                   FontSize="15"
+                                                   TextColor="#E2E8F0"
+                                                   LineBreakMode="TailTruncation" />
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Grid.Row="0"
+                                                             Grid.Column="1"
+                                                             Spacing="2">
+                                            <Label Text="Channel"
+                                                   FontSize="11"
+                                                   TextColor="#64748B" />
+                                            <Label Text="{Binding Channel, StringFormat='Ch {0}'}"
+                                                   FontSize="15"
+                                                   TextColor="#E2E8F0" />
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Grid.Row="1"
+                                                             Grid.Column="0"
+                                                             Spacing="2">
+                                            <Label Text="Security"
+                                                   FontSize="11"
+                                                   TextColor="#64748B" />
+                                            <Label Text="{Binding Security}"
+                                                   FontSize="15"
+                                                   TextColor="#E2E8F0"
+                                                   LineBreakMode="TailTruncation" />
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Grid.Row="1"
+                                                             Grid.Column="1"
+                                                             Spacing="2">
+                                            <Label Text="Vendor"
+                                                   FontSize="11"
+                                                   TextColor="#64748B" />
+                                            <Label Text="{Binding Vendor}"
+                                                   FontSize="15"
+                                                   TextColor="#E2E8F0"
+                                                   LineBreakMode="TailTruncation" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+
+                                    <Grid ColumnDefinitions="*,Auto"
+                                          ColumnSpacing="10">
+                                        <Label Grid.Column="0"
+                                               Text="{Binding FrequencyMhz, StringFormat='{}{0} MHz'}"
+                                               FontSize="12"
+                                               TextColor="#94A3B8"
+                                               VerticalTextAlignment="Center" />
+                                        <HorizontalStackLayout Grid.Column="1"
+                                                               Spacing="6"
+                                                               VerticalOptions="Center">
+                                            <Label Text="Open dossier"
+                                                   FontSize="13"
+                                                   TextColor="#7DD3FC"
+                                                   VerticalTextAlignment="Center" />
+                                            <Label Text=">"
+                                                   FontSize="18"
+                                                   TextColor="#7DD3FC"
+                                                   VerticalTextAlignment="Center" />
+                                        </HorizontalStackLayout>
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <BoxView HeightRequest="12"
+                         Color="Transparent" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Grid x:Name="NetworkDetailOverlay"
+              IsVisible="False"
+              BackgroundColor="Transparent">
+
+            <BoxView x:Name="NetworkDetailBackdrop"
+                     Color="#DD020617"
+                     Opacity="0">
+                <BoxView.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnNetworkDetailBackdropTapped" />
+                </BoxView.GestureRecognizers>
+            </BoxView>
+
+            <Border x:Name="NetworkDetailCard"
+                    x:DataType="{x:Null}"
+                    Margin="18"
+                    Padding="18"
+                    StrokeShape="RoundRectangle 30"
+                    Stroke="#334155"
+                    StrokeThickness="1"
+                    BackgroundColor="#0B1220"
+                    MaximumWidthRequest="560"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Opacity="0"
+                    Scale="0.94">
+
+                <ScrollView MaximumHeightRequest="680">
+                    <VerticalStackLayout Spacing="16">
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0"
+                                                 Spacing="3">
+                                <Label Text="Network Dossier"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="#38BDF8" />
+                                <Label Text="{Binding Ssid}"
+                                       FontSize="24"
+                                       FontAttributes="Bold"
+                                       TextColor="#F8FAFC"
+                                       LineBreakMode="TailTruncation" />
+                                <Label Text="{Binding Bssid}"
+                                       FontSize="12"
+                                       TextColor="#94A3B8"
+                                       LineBreakMode="TailTruncation" />
+                            </VerticalStackLayout>
+
+                            <Button Grid.Column="1"
+                                    Text="Close"
+                                    Clicked="OnCloseNetworkDetailClicked"
+                                    WidthRequest="72"
+                                    HeightRequest="42"
+                                    CornerRadius="21"
+                                    FontSize="13"
+                                    FontAttributes="Bold"
+                                    BackgroundColor="#111827"
+                                    TextColor="#E2E8F0" />
+                        </Grid>
+
+                        <VerticalStackLayout Spacing="8">
+                            <Label x:Name="DetailHeadlineLabel"
+                                   Text="Network summary"
+                                   FontSize="14"
+                                   TextColor="#CBD5E1"
+                                   LineBreakMode="WordWrap" />
+
+                            <Border x:Name="DetailRiskFrame"
+                                    Padding="10,7"
+                                    StrokeShape="RoundRectangle 16"
+                                    Stroke="#334155"
+                                    StrokeThickness="1"
+                                    BackgroundColor="#1E293B"
+                                    HorizontalOptions="Start">
+                                <Label x:Name="DetailRiskLabel"
+                                       Text="Risk"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="#F8FAFC" />
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <Grid ColumnDefinitions="*,*"
+                              RowDefinitions="Auto,Auto"
+                              ColumnSpacing="10"
+                              RowSpacing="10">
+                            <Border Padding="13"
+                                    StrokeShape="RoundRectangle 20"
+                                    Stroke="#1E293B"
+                                    StrokeThickness="1"
+                                    BackgroundColor="#111827">
+                                <VerticalStackLayout Spacing="3">
+                                    <Label Text="Signal"
+                                           FontSize="11"
+                                           TextColor="#64748B" />
+                                    <Label Text="{Binding SignalDbm, StringFormat='{}{0} dBm'}"
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           TextColor="#E2E8F0" />
+                                    <Label Text="{Binding ConfidenceScore, StringFormat='Confidence {0:P0}'}"
+                                           FontSize="11"
+                                           TextColor="#94A3B8" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <Border Grid.Column="1"
+                                    Padding="13"
+                                    StrokeShape="RoundRectangle 20"
+                                    Stroke="#1E293B"
+                                    StrokeThickness="1"
+                                    BackgroundColor="#111827">
+                                <VerticalStackLayout Spacing="3">
+                                    <Label Text="Security"
+                                           FontSize="11"
+                                           TextColor="#64748B" />
+                                    <Label Text="{Binding Security}"
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           TextColor="#E2E8F0"
+                                           LineBreakMode="TailTruncation" />
+                                    <Label Text="{Binding SecurityCategory}"
+                                           FontSize="11"
+                                           TextColor="#94A3B8" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <Border Grid.Row="1"
+                                    Padding="13"
+                                    StrokeShape="RoundRectangle 20"
+                                    Stroke="#1E293B"
+                                    StrokeThickness="1"
+                                    BackgroundColor="#111827">
+                                <VerticalStackLayout Spacing="3">
+                                    <Label Text="Band / Channel"
+                                           FontSize="11"
+                                           TextColor="#64748B" />
+                                    <Label Text="{Binding Band}"
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           TextColor="#E2E8F0" />
+                                    <Label Text="{Binding Channel, StringFormat='Channel {0}'}"
+                                           FontSize="11"
+                                           TextColor="#94A3B8" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <Border Grid.Row="1"
+                                    Grid.Column="1"
+                                    Padding="13"
+                                    StrokeShape="RoundRectangle 20"
+                                    Stroke="#1E293B"
+                                    StrokeThickness="1"
+                                    BackgroundColor="#111827">
+                                <VerticalStackLayout Spacing="3">
+                                    <Label Text="Frequency / Vendor"
+                                           FontSize="11"
+                                           TextColor="#64748B" />
+                                    <Label Text="{Binding FrequencyMhz, StringFormat='{}{0} MHz'}"
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           TextColor="#E2E8F0" />
+                                    <Label Text="{Binding Vendor}"
+                                           FontSize="11"
+                                           TextColor="#94A3B8"
+                                           LineBreakMode="TailTruncation" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+
+                        <Border Padding="14"
+                                StrokeShape="RoundRectangle 22"
+                                Stroke="#1E293B"
+                                StrokeThickness="1"
+                                BackgroundColor="#111827">
+                            <VerticalStackLayout Spacing="10">
+                                <Label Text="Vyre readout"
+                                       FontSize="15"
+                                       FontAttributes="Bold"
+                                       TextColor="#F8FAFC" />
+
+                                <VerticalStackLayout Spacing="3">
+                                    <Label Text="Signal verdict"
+                                           FontSize="11"
+                                           TextColor="#64748B" />
+                                    <Label x:Name="SignalVerdictLabel"
+                                           FontSize="13"
+                                           TextColor="#CBD5E1"
+                                           LineBreakMode="WordWrap" />
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Spacing="3">
+                                    <Label Text="Security verdict"
+                                           FontSize="11"
+                                           TextColor="#64748B" />
+                                    <Label x:Name="SecurityVerdictLabel"
+                                           FontSize="13"
+                                           TextColor="#CBD5E1"
+                                           LineBreakMode="WordWrap" />
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Spacing="3">
+                                    <Label Text="Channel verdict"
+                                           FontSize="11"
+                                           TextColor="#64748B" />
+                                    <Label x:Name="ChannelVerdictLabel"
+                                           FontSize="13"
+                                           TextColor="#CBD5E1"
+                                           LineBreakMode="WordWrap" />
+                                </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Border>
+        </Grid>
+    </Grid>
 </ContentPage>

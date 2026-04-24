@@ -82,6 +82,28 @@ public sealed class ReportArchiveService : IReportArchiveService, IDisposable
         }
     }
 
+    public async Task<string> ReadReportJsonAsync(string reportId, CancellationToken cancellationToken)
+    {
+        await _gate.WaitAsync(cancellationToken);
+        try
+        {
+            var index = await LoadIndexInternalAsync(cancellationToken);
+            var record = index.FirstOrDefault(x => string.Equals(x.Id, reportId, StringComparison.OrdinalIgnoreCase))
+                ?? throw new InvalidOperationException("Report not found.");
+
+            if (string.IsNullOrWhiteSpace(record.JsonPath) || !File.Exists(record.JsonPath))
+            {
+                throw new InvalidOperationException("Report JSON file is missing.");
+            }
+
+            return await File.ReadAllTextAsync(record.JsonPath, cancellationToken);
+        }
+        finally
+        {
+            _gate.Release();
+        }
+    }
+
     public async Task<CompareReportModel> CompareAsync(string leftReportId, string rightReportId, CancellationToken cancellationToken)
     {
         await _gate.WaitAsync(cancellationToken);
