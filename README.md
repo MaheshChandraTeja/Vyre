@@ -15,7 +15,7 @@ It combines a **high‑performance C++ networking engine** with a **.NET MAUI us
 
 No fake theatrics.  
 No bloated dashboards.  
-No “it works because the spinner says so” nonsense.  
+No "it works because the spinner says so" nonsense.  
 Just clean data, real diagnostics, and a UI that stays out of your way.
 
 ---
@@ -142,22 +142,6 @@ Your networks stay yours. Radical concept, apparently. 🔒
 - **CMake + CI** — reproducible builds  
 
 ---
-
-## 📶 Usage Module Architecture
-
-The **Usage** tab shows app-level network activity where the OS exposes that data. It tracks upload/download totals, current network type, top talkers, and timeframe-based trends.
-
-```
-src/dotnet/Vyre.App/Pages/UsagePage.xaml
-src/dotnet/Vyre.App/Pages/UsagePage.xaml.cs
-src/dotnet/Vyre.App/ViewModels/UsageViewModel.cs
-src/dotnet/Vyre.App/Models/AppNetworkUsageModel.cs
-src/dotnet/Vyre.App/Services/Usage/IAppNetworkUsageService.cs
-src/dotnet/Vyre.App/Services/Usage/AppNetworkUsageService.shared.cs
-src/dotnet/Vyre.App/Services/Usage/AppNetworkUsageService.android.cs
-src/dotnet/Vyre.App/Services/Usage/AppNetworkUsageService.windows.cs
-src/dotnet/Vyre.App/Services/Usage/AppNetworkUsageService.ios.cs
-```
 
 **Platform behavior**
 - **Android:** real per-app usage via `NetworkStatsManager`, mapped from UID to installed apps
