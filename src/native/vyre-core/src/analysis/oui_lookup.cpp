@@ -43,7 +43,7 @@ namespace vyre::core::analysis
     {
         entries_.clear();
 
-        std::istringstream input(std::string(csv_text));
+        std::istringstream input{std::string(csv_text)};
         std::string line;
         bool any_loaded = false;
 

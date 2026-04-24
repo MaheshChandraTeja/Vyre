@@ -5,6 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:Vyre.App.Models"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:Vyre.App.ViewModels"
+    x:DataType="vm:ScanViewModel"
     Title="Scan"
     Shell.NavBarIsVisible="False"
     BackgroundColor="{StaticResource PageBackgroundColor}">

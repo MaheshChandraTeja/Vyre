@@ -5,6 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:Vyre.App.Models"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:Vyre.App.ViewModels"
+    x:DataType="vm:CaptureViewModel"
     Title="Capture"
     Shell.NavBarIsVisible="False"
     BackgroundColor="{StaticResource PageBackgroundColor}">
@@ -193,8 +195,12 @@
 
                         <Picker Title="Filter preset"
                                 ItemsSource="{Binding FilterPresets}"
-                                ItemDisplayBinding="{Binding Name}"
-                                SelectedItem="{Binding SelectedPreset}" />
+                                SelectedItem="{Binding SelectedPreset}">
+                            <Picker.ItemDisplayBinding>
+                                <Binding Path="Name"
+                                         x:DataType="vm:CaptureFilterPreset" />
+                            </Picker.ItemDisplayBinding>
+                        </Picker>
 
                         <Label Text="{Binding SelectedPresetDescription}"
                                FontSize="13"

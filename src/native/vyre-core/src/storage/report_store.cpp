@@ -158,7 +158,7 @@ namespace vyre::core::reporting
         out_record.report.access_points.clear();
         out_record.report.issues.clear();
 
-        const std::regex ap_regex(R"(\{"ssid":"([^"]*)","bssid":"([^"]*)","vendor":"([^"]*)","band":"([^"]*)","security":"([^"]*)","channel":(-?\d+),"frequencyMhz":(-?\d+),"signalDbm":(-?\d+),"partialObservation":(true|false),"confidenceScore":([0-9.]+)\})");
+        const std::regex ap_regex(R"json(\{"ssid":"([^"]*)","bssid":"([^"]*)","vendor":"([^"]*)","band":"([^"]*)","security":"([^"]*)","channel":(-?\d+),"frequencyMhz":(-?\d+),"signalDbm":(-?\d+),"partialObservation":(true|false),"confidenceScore":([0-9.]+)\})json");
         for (std::sregex_iterator it(report_json.begin(), report_json.end(), ap_regex), end; it != end; ++it)
         {
             const auto& m = *it;
@@ -178,7 +178,7 @@ namespace vyre::core::reporting
             });
         }
 
-        const std::regex issue_regex(R"(\{"rank":(-?\d+),"code":"([^"]*)","severity":"([^"]*)","title":"([^"]*)","description":"([^"]*)","evidence":"([^"]*)","fixSteps":"([^"]*)"\})");
+        const std::regex issue_regex(R"json(\{"rank":(-?\d+),"code":"([^"]*)","severity":"([^"]*)","title":"([^"]*)","description":"([^"]*)","evidence":"([^"]*)","fixSteps":"([^"]*)"\})json");
         for (std::sregex_iterator it(report_json.begin(), report_json.end(), issue_regex), end; it != end; ++it)
         {
             const auto& m = *it;

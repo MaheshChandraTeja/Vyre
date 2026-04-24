@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include <atomic>
+#include <cmath>
 #include <cstdint>
 #include <fstream>
 #include <mutex>
@@ -218,7 +219,7 @@ std::vector<std::string> ExtractStringArrayField(const std::string_view json, co
     }
 
     const std::string array_content = array_match[1].str();
-    const std::regex string_regex(R"("([^"]*)")");
+    const std::regex string_regex(R"json("([^"]*)")json");
 
     for (std::sregex_iterator it(array_content.begin(), array_content.end(), string_regex), end; it != end; ++it) {
         if (it->size() > 1) {

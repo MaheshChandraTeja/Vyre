@@ -1,4 +1,4 @@
-#if !ANDROID && !IOS
+#if !ANDROID && !IOS && !WINDOWS
 using Vyre.App.Models;
 
 namespace Vyre.App.Services.Wifi;

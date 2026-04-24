@@ -67,15 +67,15 @@ VYRE_API int32_t vyre_get_error_string(int32_t status_code, char** value);
 /* Memory helpers */
 VYRE_API void vyre_free_string(char* value);
 
-VYRE_API_EXPORT int32_t vyre_list_capture_devices_json(char** out_json);
-VYRE_API_EXPORT int32_t vyre_capture_start(
+VYRE_API int32_t vyre_list_capture_devices_json(char** out_json);
+VYRE_API int32_t vyre_capture_start(
     const char* device_name_utf8,
     const char* output_path_utf8,
     const char* bpf_filter_utf8,
     int32_t duration_seconds,
     int64_t* out_capture_handle);
-VYRE_API_EXPORT int32_t vyre_capture_get_status_json(int64_t capture_handle, char** out_json);
-VYRE_API_EXPORT int32_t vyre_capture_stop(int64_t capture_handle, char** out_json);
+VYRE_API int32_t vyre_capture_get_status_json(int64_t capture_handle, char** out_json);
+VYRE_API int32_t vyre_capture_stop(int64_t capture_handle, char** out_json);
 
 #ifdef __cplusplus
 }

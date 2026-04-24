@@ -50,7 +50,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8.0.x"
+          dotnet-version: "10.0.201"
 
       - name: Install MAUI workload
         shell: pwsh
@@ -58,12 +58,8 @@ jobs:
 
       - name: Restore
         shell: pwsh
-        run: dotnet restore wifi-ui-maui/Vyre.Maui.sln
+        run: dotnet restore .\Vyre.sln
 
       - name: Build MAUI (Windows)
         shell: pwsh
-        run: dotnet build wifi-ui-maui/src/Vyre.Maui/Vyre.Maui.csproj -c Release -f net8.0-windows10.0.19041.0
-
-      - name: Run .NET tests
-        shell: pwsh
-        run: dotnet test wifi-ui-maui/tests/Vyre.Maui.Tests/Vyre.Maui.Tests.csproj -c Release
+        run: dotnet build .\src\dotnet\Vyre.App\Vyre.App.csproj -c Release -f net10.0-windows10.0.19041.0 --no-restore

@@ -28,9 +28,30 @@ target_compile_definitions(vyre-core
         VYRE_CORE_OUI_DB_RELATIVE_PATH="data/oui_db.csv"
 )
 
-option(VYRE_ENABLE_PCAP "Enable libpcap/Npcap capture support" ON)
+if (WIN32)
+    set(VYRE_ENABLE_PCAP_DEFAULT OFF)
+else()
+    set(VYRE_ENABLE_PCAP_DEFAULT ON)
+endif()
+
+option(VYRE_ENABLE_PCAP "Enable libpcap/Npcap capture support" ${VYRE_ENABLE_PCAP_DEFAULT})
 
 if (VYRE_ENABLE_PCAP)
+    find_path(VYRE_PCAP_INCLUDE_DIR pcap.h)
+    find_library(VYRE_PCAP_LIBRARY NAMES pcap wpcap)
+
+    if (NOT VYRE_PCAP_INCLUDE_DIR OR NOT VYRE_PCAP_LIBRARY)
+        message(WARNING "libpcap/Npcap was requested but pcap.h or the pcap library was not found. Building capture stubs.")
+        set(VYRE_ENABLE_PCAP OFF)
+    endif()
+endif()
+
+if (VYRE_ENABLE_PCAP)
+    target_include_directories(vyre-core
+        PRIVATE
+            ${VYRE_PCAP_INCLUDE_DIR}
+    )
+
     target_compile_definitions(vyre-core
         PUBLIC
             VYRE_HAS_PCAP=1
@@ -38,7 +59,7 @@ if (VYRE_ENABLE_PCAP)
 
     target_link_libraries(vyre-core
         PUBLIC
-            pcap
+            ${VYRE_PCAP_LIBRARY}
     )
 endif()
 

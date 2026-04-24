@@ -50,8 +50,10 @@ int main() {
     char* report_value = nullptr;
     assert(vyre_analyze_json(scan_json.c_str(), &report_value) == VYRE_STATUS_OK);
     const std::string report = TakeOwnership(report_value);
-    assert(report.find("\"totalNetworks\":2") != std::string::npos);
-    assert(report.find("\"strongestNetwork\"") != std::string::npos);
+    assert(report.find("\"schema\":\"vyre.report.v1\"") != std::string::npos);
+    assert(report.find("\"accessPoints\":[") != std::string::npos);
+    assert(report.find("\"bssid\":\"34:12:98:AB:CD:EF\"") != std::string::npos);
+    assert(report.find("\"bssid\":\"14:23:45:67:89:10\"") != std::string::npos);
 
     assert(vyre_scan_free_results(&results) == VYRE_STATUS_OK);
     assert(results.count == 0);

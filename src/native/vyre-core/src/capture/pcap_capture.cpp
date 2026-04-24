@@ -462,6 +462,8 @@ namespace vyre::core::capture
             CaptureWorker(*ptr, device_name, duration_seconds);
         });
 #else
+        static_cast<void>(device_name);
+        static_cast<void>(duration_seconds);
         session->error_message = "Packet capture support was not compiled in. Define VYRE_HAS_PCAP and link libpcap/Npcap.";
         session->completed = true;
 #endif
