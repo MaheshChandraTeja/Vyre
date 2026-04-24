@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Vyre.App.Pages.SettingsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Vyre.App.ViewModels"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Title="Settings"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource PageBackgroundColor}">
+
+    <ScrollView BackgroundColor="{StaticResource PageBackgroundColor}">
+        <VerticalStackLayout Padding="24,28,24,36"
+                             Spacing="20"
+                             BackgroundColor="{StaticResource PageBackgroundColor}">
+
+            <!-- Header -->
+            <VerticalStackLayout Spacing="8">
+                <HorizontalStackLayout Spacing="12"
+                                       VerticalOptions="Center">
+                    <Image Source="settings.png"
+                           WidthRequest="38"
+                           HeightRequest="38"
+                           VerticalOptions="Center"
+                           Aspect="AspectFit">
+                        <Image.Behaviors>
+                            <toolkit:IconTintColorBehavior TintColor="#F8FAFC" />
+                        </Image.Behaviors>
+                    </Image>
+
+                    <Label Text="Settings"
+                           VerticalOptions="Center"
+                           Style="{StaticResource PageTitleLabelStyle}" />
+                </HorizontalStackLayout>
+
+                <Label Text="Privacy, scanning, history, diagnostics, and interface behavior."
+                       Style="{StaticResource PageSubtitleLabelStyle}" />
+            </VerticalStackLayout>
+
+            <!-- Control Center -->
+            <Frame Padding="24"
+                   CornerRadius="34"
+                   HasShadow="False"
+                   BackgroundColor="{StaticResource SurfaceAltColor}"
+                   BorderColor="{StaticResource BorderColor}">
+
+                <VerticalStackLayout Spacing="20">
+
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="16">
+                        <VerticalStackLayout Grid.Column="0"
+                                             Spacing="6"
+                                             VerticalOptions="Center">
+                            <Label Text="Control profile"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource PrimaryTextColor}"
+                                   LineBreakMode="TailTruncation"
+                                   MaxLines="1" />
+
+                            <Label Text="{Binding ProfileSummary}"
+                                   FontSize="14"
+                                   TextColor="{StaticResource SecondaryTextColor}"
+                                   LineBreakMode="WordWrap"
+                                   MaxLines="3" />
+                        </VerticalStackLayout>
+
+                        <Frame Grid.Column="1"
+                               WidthRequest="94"
+                               HeightRequest="94"
+                               Padding="0"
+                               CornerRadius="47"
+                               HasShadow="False"
+                               BackgroundColor="{StaticResource AccentMutedColor}"
+                               BorderColor="{StaticResource AccentColor}"
+                               VerticalOptions="Center">
+                            <VerticalStackLayout Spacing="0"
+                                                 VerticalOptions="Center"
+                                                 HorizontalOptions="Center">
+                                <Label Text="{Binding SettingsScore}"
+                                       FontSize="30"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource PrimaryTextColor}"
+                                       HorizontalTextAlignment="Center" />
+
+                                <Label Text="{Binding SettingsScoreLabel}"
+                                       FontSize="11"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource AccentSoftColor}"
+                                       HorizontalTextAlignment="Center"
+                                       LineBreakMode="NoWrap"
+                                       MaxLines="1" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </Grid>
+
+                    <ProgressBar Progress="{Binding SettingsScoreProgress}"
+                                 HeightRequest="8"
+                                 ProgressColor="{StaticResource AccentSoftColor}"
+                                 BackgroundColor="{StaticResource SurfaceRaisedColor}" />
+
+                    <Grid ColumnDefinitions="*,*,*"
+                          ColumnSpacing="10">
+                        <Button Text="Privacy"
+                                Command="{Binding SetPrivacyPresetCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                HeightRequest="48"
+                                CornerRadius="18" />
+
+                        <Button Grid.Column="1"
+                                Text="Balanced"
+                                Command="{Binding SetBalancedPresetCommand}"
+                                HeightRequest="48"
+                                CornerRadius="18" />
+
+                        <Button Grid.Column="2"
+                                Text="Fast"
+                                Command="{Binding SetPerformancePresetCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                HeightRequest="48"
+                                CornerRadius="18" />
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Profile Signals -->
+            <Frame Padding="20"
+                   CornerRadius="32"
+                   HasShadow="False"
+                   BackgroundColor="{StaticResource SurfaceColor}"
+                   BorderColor="{StaticResource BorderColor}">
+
+                <VerticalStackLayout Spacing="16">
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0"
+                                             Spacing="4"
+                                             VerticalOptions="Center">
+                            <Label Text="Configuration health"
+                                   FontSize="23"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource PrimaryTextColor}"
+                                   LineBreakMode="TailTruncation"
+                                   MaxLines="1" />
+
+                            <Label Text="Live readout of how your settings affect privacy, battery, and history."
+                                   FontSize="14"
+                                   TextColor="{StaticResource SecondaryTextColor}"
+                                   LineBreakMode="WordWrap"
+                                   MaxLines="2" />
+                        </VerticalStackLayout>
+
+                        <Border Grid.Column="1"
+                                Padding="12,6"
+                                Stroke="{StaticResource BorderColor}"
+                                StrokeThickness="1"
+                                BackgroundColor="{StaticResource SurfaceRaisedColor}"
+                                StrokeShape="RoundRectangle 999"
+                                HorizontalOptions="End"
+                                VerticalOptions="Start">
+
+                            <Label Text="{Binding SettingsScoreLabel}"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource AccentSoftColor}"
+                                   LineBreakMode="NoWrap"
+                                   MaxLines="1" />
+                        </Border>
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="12"
+                                         BindableLayout.ItemsSource="{Binding HealthItems}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="vm:SettingsHealthItem">
+                                <Frame Padding="16,14"
+                                       CornerRadius="24"
+                                       HasShadow="False"
+                                       BackgroundColor="#0B1220"
+                                       BorderColor="{StaticResource BorderColor}">
+
+                                    <Grid ColumnDefinitions="Auto,*,Auto"
+                                          ColumnSpacing="14"
+                                          VerticalOptions="Center">
+
+                                        <Frame Grid.Column="0"
+                                               WidthRequest="14"
+                                               HeightRequest="14"
+                                               Padding="0"
+                                               CornerRadius="7"
+                                               HasShadow="False"
+                                               BackgroundColor="{Binding AccentColor}"
+                                               BorderColor="{Binding AccentColor}"
+                                               VerticalOptions="Start"
+                                               Margin="0,5,0,0" />
+
+                                        <VerticalStackLayout Grid.Column="1"
+                                                             Spacing="5"
+                                                             VerticalOptions="Center">
+                                            <Label Text="{Binding Title}"
+                                                   FontSize="17"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{StaticResource PrimaryTextColor}"
+                                                   LineBreakMode="TailTruncation"
+                                                   MaxLines="1" />
+
+                                            <Label Text="{Binding Detail}"
+                                                   FontSize="13"
+                                                   TextColor="{StaticResource SecondaryTextColor}"
+                                                   LineBreakMode="WordWrap"
+                                                   MaxLines="2" />
+                                        </VerticalStackLayout>
+
+                                        <Border Grid.Column="2"
+                                                Padding="12,6"
+                                                Stroke="{StaticResource BorderColor}"
+                                                StrokeThickness="1"
+                                                BackgroundColor="{StaticResource SurfaceRaisedColor}"
+                                                StrokeShape="RoundRectangle 999"
+                                                HorizontalOptions="End"
+                                                VerticalOptions="Start"
+                                                Margin="0,2,0,0">
+
+                                            <Label Text="{Binding Status}"
+                                                   FontSize="11"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{Binding AccentColor}"
+                                                   HorizontalTextAlignment="Center"
+                                                   VerticalTextAlignment="Center"
+                                                   LineBreakMode="NoWrap"
+                                                   MaxLines="1" />
+                                        </Border>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Scanning -->
+            <Frame Padding="22"
+                   CornerRadius="32"
+                   HasShadow="False"
+                   BackgroundColor="{StaticResource SurfaceColor}"
+                   BorderColor="{StaticResource BorderColor}">
+
+                <VerticalStackLayout Spacing="18">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Scanning"
+                               FontSize="23"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource PrimaryTextColor}" />
+
+                        <Label Text="{Binding IntervalSummary}"
+                               FontSize="14"
+                               TextColor="{StaticResource SecondaryTextColor}"
+                               LineBreakMode="WordWrap" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Preferred interface"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource SecondaryTextColor}" />
+
+                        <Picker ItemsSource="{Binding InterfaceOptions}"
+                                SelectedItem="{Binding SelectedInterface}" />
+                    </VerticalStackLayout>
+
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0"
+                                             Spacing="4">
+                            <Label Text="Scan interval"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource SecondaryTextColor}" />
+
+                            <Label Text="{Binding IntervalSummary}"
+                                   FontSize="13"
+                                   TextColor="{StaticResource SecondaryTextColor}"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <Entry Grid.Column="1"
+                               WidthRequest="100"
+                               Keyboard="Numeric"
+                               HorizontalTextAlignment="Center"
+                               Text="{Binding ScanIntervalSeconds}" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,*,*,*"
+                          ColumnSpacing="8">
+                        <Button Text="5s"
+                                Command="{Binding SetInterval5Command}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                HeightRequest="44"
+                                CornerRadius="16" />
+
+                        <Button Grid.Column="1"
+                                Text="10s"
+                                Command="{Binding SetInterval10Command}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                HeightRequest="44"
+                                CornerRadius="16" />
+
+                        <Button Grid.Column="2"
+                                Text="30s"
+                                Command="{Binding SetInterval30Command}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                HeightRequest="44"
+                                CornerRadius="16" />
+
+                        <Button Grid.Column="3"
+                                Text="60s"
+                                Command="{Binding SetInterval60Command}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                HeightRequest="44"
+                                CornerRadius="16" />
+                    </Grid>
+
+                    <Frame Padding="16"
+                           CornerRadius="24"
+                           HasShadow="False"
+                           BackgroundColor="#0B1220"
+                           BorderColor="{StaticResource BorderColor}">
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="14">
+                            <VerticalStackLayout Grid.Column="0"
+                                                 Spacing="4">
+                                <Label Text="Auto refresh"
+                                       FontSize="17"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource PrimaryTextColor}" />
+
+                                <Label Text="Refresh scan-backed pages automatically when the app resumes."
+                                       FontSize="13"
+                                       TextColor="{StaticResource SecondaryTextColor}"
+                                       LineBreakMode="WordWrap" />
+                            </VerticalStackLayout>
+
+                            <CheckBox Grid.Column="1"
+                                      IsChecked="{Binding AutoRefreshEnabled}"
+                                      VerticalOptions="Center" />
+                        </Grid>
+                    </Frame>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Privacy & Storage -->
+            <Frame Padding="22"
+                   CornerRadius="32"
+                   HasShadow="False"
+                   BackgroundColor="{StaticResource SurfaceColor}"
+                   BorderColor="{StaticResource BorderColor}">
+
+                <VerticalStackLayout Spacing="16">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Privacy &amp; storage"
+                               FontSize="23"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource PrimaryTextColor}" />
+
+                        <Label Text="{Binding DiagnosticsSummary}"
+                               FontSize="14"
+                               TextColor="{StaticResource SecondaryTextColor}"
+                               LineBreakMode="WordWrap" />
+                    </VerticalStackLayout>
+
+                    <Frame Padding="16"
+                           CornerRadius="24"
+                           HasShadow="False"
+                           BackgroundColor="#0B1220"
+                           BorderColor="{StaticResource BorderColor}">
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="14">
+                            <VerticalStackLayout Grid.Column="0"
+                                                 Spacing="4">
+                                <Label Text="Privacy mode"
+                                       FontSize="17"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource PrimaryTextColor}" />
+
+                                <Label Text="Reduce sensitive details and handle scan data more cautiously."
+                                       FontSize="13"
+                                       TextColor="{StaticResource SecondaryTextColor}"
+                                       LineBreakMode="WordWrap" />
+                            </VerticalStackLayout>
+
+                            <CheckBox Grid.Column="1"
+                                      IsChecked="{Binding PrivacyModeEnabled}"
+                                      VerticalOptions="Center" />
+                        </Grid>
+                    </Frame>
+
+                    <Frame Padding="16"
+                           CornerRadius="24"
+                           HasShadow="False"
+                           BackgroundColor="#0B1220"
+                           BorderColor="{StaticResource BorderColor}">
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="14">
+                            <VerticalStackLayout Grid.Column="0"
+                                                 Spacing="4">
+                                <Label Text="Local-only mode"
+                                       FontSize="17"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource PrimaryTextColor}" />
+
+                                <Label Text="Keep processing and generated artifacts on this device whenever possible."
+                                       FontSize="13"
+                                       TextColor="{StaticResource SecondaryTextColor}"
+                                       LineBreakMode="WordWrap" />
+                            </VerticalStackLayout>
+
+                            <CheckBox Grid.Column="1"
+                                      IsChecked="{Binding LocalOnlyModeEnabled}"
+                                      VerticalOptions="Center" />
+                        </Grid>
+                    </Frame>
+
+                    <Frame Padding="16"
+                           CornerRadius="24"
+                           HasShadow="False"
+                           BackgroundColor="#0B1220"
+                           BorderColor="{StaticResource BorderColor}">
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="14">
+                            <VerticalStackLayout Grid.Column="0"
+                                                 Spacing="4">
+                                <Label Text="Save report history"
+                                       FontSize="17"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource PrimaryTextColor}" />
+
+                                <Label Text="{Binding RetentionSummary}"
+                                       FontSize="13"
+                                       TextColor="{StaticResource SecondaryTextColor}"
+                                       LineBreakMode="WordWrap" />
+                            </VerticalStackLayout>
+
+                            <CheckBox Grid.Column="1"
+                                      IsChecked="{Binding SaveReportHistory}"
+                                      VerticalOptions="Center" />
+                        </Grid>
+                    </Frame>
+
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Report retention"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource SecondaryTextColor}" />
+
+                        <Picker ItemsSource="{Binding RetentionOptions}"
+                                SelectedItem="{Binding SelectedRetention}" />
+                    </VerticalStackLayout>
+
+                    <Frame Padding="16"
+                           CornerRadius="24"
+                           HasShadow="False"
+                           BackgroundColor="#0B1220"
+                           BorderColor="{StaticResource BorderColor}">
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="14">
+                            <VerticalStackLayout Grid.Column="0"
+                                                 Spacing="4">
+                                <Label Text="Allow diagnostic sharing"
+                                       FontSize="17"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource PrimaryTextColor}" />
+
+                                <Label Text="Permit diagnostic material to be shared only when you explicitly export it."
+                                       FontSize="13"
+                                       TextColor="{StaticResource SecondaryTextColor}"
+                                       LineBreakMode="WordWrap" />
+                            </VerticalStackLayout>
+
+                            <CheckBox Grid.Column="1"
+                                      IsChecked="{Binding ShareDiagnostics}"
+                                      VerticalOptions="Center" />
+                        </Grid>
+                    </Frame>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Experience -->
+            <Frame Padding="22"
+                   CornerRadius="32"
+                   HasShadow="False"
+                   BackgroundColor="{StaticResource SurfaceColor}"
+                   BorderColor="{StaticResource BorderColor}">
+
+                <VerticalStackLayout Spacing="16">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Experience"
+                               FontSize="23"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource PrimaryTextColor}" />
+
+                        <Label Text="Tune how much detail Vyre shows while you work."
+                               FontSize="14"
+                               TextColor="{StaticResource SecondaryTextColor}"
+                               LineBreakMode="WordWrap" />
+                    </VerticalStackLayout>
+
+                    <Frame Padding="16"
+                           CornerRadius="24"
+                           HasShadow="False"
+                           BackgroundColor="#0B1220"
+                           BorderColor="{StaticResource BorderColor}">
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="14">
+                            <VerticalStackLayout Grid.Column="0"
+                                                 Spacing="4">
+                                <Label Text="Compact cards"
+                                       FontSize="17"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource PrimaryTextColor}" />
+
+                                <Label Text="Prefer dense lists over larger inspection cards where supported."
+                                       FontSize="13"
+                                       TextColor="{StaticResource SecondaryTextColor}"
+                                       LineBreakMode="WordWrap" />
+                            </VerticalStackLayout>
+
+                            <CheckBox Grid.Column="1"
+                                      IsChecked="{Binding CompactCardsEnabled}"
+                                      VerticalOptions="Center" />
+                        </Grid>
+                    </Frame>
+
+                    <Frame Padding="16"
+                           CornerRadius="24"
+                           HasShadow="False"
+                           BackgroundColor="#0B1220"
+                           BorderColor="{StaticResource BorderColor}">
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="14">
+                            <VerticalStackLayout Grid.Column="0"
+                                                 Spacing="4">
+                                <Label Text="Developer mode"
+                                       FontSize="17"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource PrimaryTextColor}" />
+
+                                <Label Text="Expose extra diagnostic language and raw-ish technical labels."
+                                       FontSize="13"
+                                       TextColor="{StaticResource SecondaryTextColor}"
+                                       LineBreakMode="WordWrap" />
+                            </VerticalStackLayout>
+
+                            <CheckBox Grid.Column="1"
+                                      IsChecked="{Binding DeveloperModeEnabled}"
+                                      VerticalOptions="Center" />
+                        </Grid>
+                    </Frame>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Actions -->
+            <Frame Padding="22"
+                   CornerRadius="32"
+                   HasShadow="False"
+                   BackgroundColor="{StaticResource SurfaceAltColor}"
+                   BorderColor="{StaticResource BorderColor}">
+
+                <VerticalStackLayout Spacing="14">
+                    <Label Text="Actions"
+                           FontSize="23"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Button Text="Save Settings"
+                            Command="{Binding SaveCommand}"
+                            HeightRequest="56"
+                            CornerRadius="22"
+                            FontAttributes="Bold" />
+
+                    <Grid ColumnDefinitions="*,*"
+                          ColumnSpacing="12">
+                        <Button Grid.Column="0"
+                                Text="Reset"
+                                Command="{Binding ResetDefaultsCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                HeightRequest="52"
+                                CornerRadius="20" />
+
+                        <Button Grid.Column="1"
+                                Text="Export"
+                                Command="{Binding ExportSnapshotCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                HeightRequest="52"
+                                CornerRadius="20" />
+                    </Grid>
+
+                    <Label Text="{Binding SaveStatus}"
+                           FontSize="13"
+                           TextColor="{StaticResource AccentSoftColor}" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame IsVisible="{Binding HasError}"
+                   Padding="18"
+                   CornerRadius="24"
+                   HasShadow="False"
+                   BackgroundColor="#2A1018"
+                   BorderColor="#7F1D1D">
+                <Label Text="{Binding ErrorMessage}"
+                       FontSize="14"
+                       TextColor="#FCA5A5"
+                       LineBreakMode="WordWrap" />
+            </Frame>
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

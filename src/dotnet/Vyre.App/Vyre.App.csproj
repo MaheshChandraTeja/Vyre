@@ -2,30 +2,76 @@
   <PropertyGroup>
     <TargetFrameworks>net10.0-android</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('OSX'))">$(TargetFrameworks);net10.0-ios</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net10.0-windows10.0.19041.0</TargetFrameworks>
+
     <OutputType>Exe</OutputType>
     <RootNamespace>Vyre.App</RootNamespace>
     <UseMaui>true</UseMaui>
     <SingleProject>true</SingleProject>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
     <ApplicationTitle>Vyre</ApplicationTitle>
     <ApplicationId>com.kairais.vyre</ApplicationId>
     <ApplicationDisplayVersion>0.1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
+
     <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net10.0-android'">24.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net10.0-ios'">15.0</SupportedOSPlatformVersion>
-    <NeutralLanguage>en</NeutralLanguage>
-    <NoWarn>$(NoWarn);CA1416</NoWarn>
+    <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net10.0-windows10.0.19041.0'">10.0.17763.0</SupportedOSPlatformVersion>
+    <TargetPlatformMinVersion Condition="'$(TargetFramework)' == 'net10.0-windows10.0.19041.0'">10.0.17763.0</TargetPlatformMinVersion>
+    <WindowsPackageType Condition="'$(TargetFramework)' == 'net10.0-windows10.0.19041.0'">None</WindowsPackageType>
+
+    <NoWarn>$(NoWarn);CA1416;CA1422;MVVMTK0045</NoWarn>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0-android'">
+    <!--
+      Keep all Android RIDs in the restore graph so `dotnet build -t:Run` can target
+      either the 32-bit ARM phone or the x64 emulator without requiring a separate
+      restore/build flag.
+    -->
+    <RuntimeIdentifiers>android-arm;android-arm64;android-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Maui" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" />
+    <PackageReference Include="Microsoft.Maui.Controls" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Vyre.App.Core\Vyre.App.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#111827" />
-    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#111827" BaseSize="128,128" />
-    <MauiImage Include="Resources\Images\*" />
+    <MauiIcon Include="Resources\AppIcon\appicon.png" />
+    <MauiSplashScreen Include="Resources\Splash\vyre_splash.png" Color="#05070D" BaseSize="256,256" />
+    <MauiImage Include="Resources\Images\**\*" />
+    <MauiImage Remove="Resources\Images\2849830-gear-interface-multimedia-options-setting-settings_107986.png" />
+    <MauiImage Remove="Resources\Images\Doctor_Medical_Instrument_Stethoscope_icon-icons.com_65902.png" />
     <MauiXaml Update="**\*.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-android'">
+    <Compile Remove="Platforms\iOS\**\*.cs" />
+    <None Include="Platforms\iOS\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0-ios'">
+    <Compile Remove="Platforms\Android\**\*.cs" />
+    <None Include="Platforms\Android\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+    <None Include="..\..\..\build\windows-debug\artifacts\bin\Debug\vyre-interop.dll" Condition="Exists('..\..\..\build\windows-debug\artifacts\bin\Debug\vyre-interop.dll')" Link="vyre-interop.dll" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <MauiAsset Include="Resources\Raw\**\*" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
 </Project>

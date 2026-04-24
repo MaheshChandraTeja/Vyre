@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Vyre.App.Pages.InsightsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:Vyre.App.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Title="Insights"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource PageBackgroundColor}">
+
+    <ScrollView BackgroundColor="{StaticResource PageBackgroundColor}">
+        <VerticalStackLayout Padding="20,18,20,28"
+                             Spacing="18"
+                             BackgroundColor="{StaticResource PageBackgroundColor}">
+
+            <!-- Header -->
+            <VerticalStackLayout Spacing="6">
+                <HorizontalStackLayout Spacing="10"
+                       VerticalOptions="Center">
+
+                     <Image Source="insights.png"
+                            WidthRequest="38"
+                            HeightRequest="38"
+                            VerticalOptions="Center"
+                            Aspect="AspectFit">
+                            <Image.Behaviors>
+                            <toolkit:IconTintColorBehavior TintColor="#F8FAFC" />
+                            </Image.Behaviors>
+                     </Image>
+
+                     <Label Text="Insights"
+                            VerticalOptions="Center"
+                            Style="{StaticResource PageTitleLabelStyle}" />
+
+                     </HorizontalStackLayout>
+
+                <Label Text="{Binding SummaryMessage}"
+                       Style="{StaticResource PageSubtitleLabelStyle}" />
+            </VerticalStackLayout>
+
+            <!-- Refresh Card -->
+            <Frame>
+                <VerticalStackLayout Spacing="14">
+
+                    <Label Text="Network health"
+                           FontSize="20"
+                           FontAttributes="Bold" />
+
+                    <Label Text="Review risks, warnings, and practical fixes from the latest scan."
+                           Style="{StaticResource MetaLabelStyle}"
+                           LineBreakMode="WordWrap" />
+
+                    <Button Text="Refresh Insights"
+                            Command="{Binding RefreshCommand}" />
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <Label Text="{Binding ErrorMessage}"
+                   TextColor="{StaticResource DangerColor}" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}" />
+
+            <!-- Issues -->
+            <Label Text="Issues"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   Margin="0,10,0,0" />
+
+            <CollectionView ItemsSource="{Binding Issues}"
+                            SelectionMode="None">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"
+                                       ItemSpacing="14" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:InsightIssue">
+                        <Frame Style="{StaticResource MetricCardStyle}">
+                            <VerticalStackLayout Spacing="12">
+
+                                <Grid ColumnDefinitions="*,Auto"
+                                      ColumnSpacing="12">
+
+                                    <VerticalStackLayout Grid.Column="0"
+                                                         Spacing="4">
+                                        <HorizontalStackLayout Spacing="8">
+                                            <Label Text="{Binding Rank, StringFormat='#{0}'}"
+                                                   Style="{StaticResource MetaLabelStyle}"
+                                                   VerticalOptions="Center" />
+
+                                            <Label Text="{Binding Title}"
+                                                   FontSize="18"
+                                                   FontAttributes="Bold"
+                                                   LineBreakMode="WordWrap"
+                                                   VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+
+                                        <Label Text="{Binding Description}"
+                                               FontSize="15"
+                                               LineBreakMode="WordWrap" />
+                                    </VerticalStackLayout>
+
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Severity}"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource AccentSoftColor}"
+                                           VerticalOptions="Start"
+                                           HorizontalTextAlignment="End" />
+                                </Grid>
+
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="Code"
+                                           Style="{StaticResource MetaLabelStyle}" />
+
+                                    <Label Text="{Binding Code}"
+                                           Style="{StaticResource MetaLabelStyle}" />
+                                </VerticalStackLayout>
+
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Recommendations -->
+            <Label Text="Recommendations"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   Margin="0,10,0,0" />
+
+            <CollectionView ItemsSource="{Binding Recommendations}"
+                            SelectionMode="None">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"
+                                       ItemSpacing="14" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:InsightRecommendation">
+                        <Frame Style="{StaticResource MetricCardStyle}">
+                            <VerticalStackLayout Spacing="12">
+
+                                <Grid ColumnDefinitions="*,Auto"
+                                      ColumnSpacing="12">
+
+                                    <Label Grid.Column="0"
+                                           Text="{Binding Title}"
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           LineBreakMode="WordWrap" />
+
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Priority}"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource AccentSoftColor}"
+                                           HorizontalTextAlignment="End" />
+                                </Grid>
+
+                                <Label Text="{Binding Description}"
+                                       Style="{StaticResource MetaLabelStyle}"
+                                       LineBreakMode="WordWrap" />
+
+                                <Label Text="{Binding Id}"
+                                       Style="{StaticResource MetaLabelStyle}" />
+
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

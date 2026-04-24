@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Vyre.App.Pages.CapturePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:Vyre.App.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Title="Capture"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource PageBackgroundColor}">
+
+    <ScrollView BackgroundColor="{StaticResource PageBackgroundColor}">
+        <VerticalStackLayout Padding="24,28,24,36"
+                             Spacing="20"
+                             BackgroundColor="{StaticResource PageBackgroundColor}">
+
+            <!-- Header -->
+            <VerticalStackLayout Spacing="8">
+                <HorizontalStackLayout Spacing="12"
+                                       VerticalOptions="Center">
+                    <Image Source="capture.png"
+                           WidthRequest="38"
+                           HeightRequest="38"
+                           VerticalOptions="Center"
+                           Aspect="AspectFit">
+                        <Image.Behaviors>
+                            <toolkit:IconTintColorBehavior TintColor="#F8FAFC" />
+                        </Image.Behaviors>
+                    </Image>
+
+                    <Label Text="Capture"
+                           VerticalOptions="Center"
+                           Style="{StaticResource PageTitleLabelStyle}" />
+                </HorizontalStackLayout>
+
+                <Label Text="{Binding StatusText}"
+                       Style="{StaticResource PageSubtitleLabelStyle}" />
+            </VerticalStackLayout>
+
+            <!-- Hero / State Card -->
+            <Frame Padding="22"
+                   CornerRadius="32"
+                   HasShadow="False"
+                   BackgroundColor="#111827"
+                   BorderColor="#26324A">
+
+                <VerticalStackLayout Spacing="18">
+
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="14">
+                        <VerticalStackLayout Grid.Column="0"
+                                             Spacing="5">
+                            <Label Text="Capture session"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="#F8FAFC" />
+
+                            <Label Text="{Binding CaptureModeText}"
+                                   FontSize="14"
+                                   TextColor="#AAB7CC"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <Frame Grid.Column="1"
+                               Padding="13,8"
+                               CornerRadius="999"
+                               HasShadow="False"
+                               BackgroundColor="#182238"
+                               BorderColor="#26324A"
+                               VerticalOptions="Start">
+                            <Label Text="{Binding CaptureStateLabel}"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="#B693FF" />
+                        </Frame>
+                    </Grid>
+
+                    <ProgressBar Progress="{Binding CaptureProgress}"
+                                 HeightRequest="8"
+                                 ProgressColor="#8B3DFF"
+                                 BackgroundColor="#0B1220" />
+
+                    <Grid ColumnDefinitions="*,*,*"
+                          ColumnSpacing="10">
+
+                        <Frame Padding="14"
+                               CornerRadius="22"
+                               HasShadow="False"
+                               BackgroundColor="#0B1220"
+                               BorderColor="#1E2A44">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="Elapsed"
+                                       FontSize="12"
+                                       TextColor="#AAB7CC" />
+
+                                <Label Text="{Binding ElapsedText}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="#F8FAFC" />
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <Frame Grid.Column="1"
+                               Padding="14"
+                               CornerRadius="22"
+                               HasShadow="False"
+                               BackgroundColor="#0B1220"
+                               BorderColor="#1E2A44">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="Packet rate"
+                                       FontSize="12"
+                                       TextColor="#AAB7CC" />
+
+                                <Label Text="{Binding PacketRateText}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="#F8FAFC" />
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <Frame Grid.Column="2"
+                               Padding="14"
+                               CornerRadius="22"
+                               HasShadow="False"
+                               BackgroundColor="#0B1220"
+                               BorderColor="#1E2A44">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="Size"
+                                       FontSize="12"
+                                       TextColor="#AAB7CC" />
+
+                                <Label Text="{Binding BytesWrittenText}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="#F8FAFC" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Controls -->
+            <Frame Padding="22"
+                   CornerRadius="32"
+                   HasShadow="False"
+                   BackgroundColor="#111827"
+                   BorderColor="#26324A">
+
+                <VerticalStackLayout Spacing="18">
+
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="14">
+                        <VerticalStackLayout Grid.Column="0"
+                                             Spacing="4">
+                            <Label Text="Capture setup"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   TextColor="#F8FAFC" />
+
+                            <Label Text="Choose interface, filter, duration, then run a bounded capture."
+                                   FontSize="14"
+                                   TextColor="#AAB7CC"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <Button Grid.Column="1"
+                                Text="Devices"
+                                Command="{Binding RefreshDevicesCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                WidthRequest="110"
+                                HeightRequest="46"
+                                CornerRadius="18"
+                                FontAttributes="Bold" />
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Interface"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="#AAB7CC" />
+
+                        <Picker Title="Capture device"
+                                ItemsSource="{Binding Devices}"
+                                SelectedItem="{Binding SelectedDevice}" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Filter preset"
+                               FontSize="13"
+                               FontAttributes="Bold"
+                               TextColor="#AAB7CC" />
+
+                        <Picker Title="Filter preset"
+                                ItemsSource="{Binding FilterPresets}"
+                                ItemDisplayBinding="{Binding Name}"
+                                SelectedItem="{Binding SelectedPreset}" />
+
+                        <Label Text="{Binding SelectedPresetDescription}"
+                               FontSize="13"
+                               TextColor="#AAB7CC"
+                               LineBreakMode="WordWrap" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="10">
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0"
+                                                 Spacing="3">
+                                <Label Text="Duration"
+                                       FontSize="13"
+                                       FontAttributes="Bold"
+                                       TextColor="#AAB7CC" />
+
+                                <Label Text="{Binding DurationLabel}"
+                                       FontSize="13"
+                                       TextColor="#AAB7CC" />
+                            </VerticalStackLayout>
+
+                            <Entry Grid.Column="1"
+                                   WidthRequest="96"
+                                   Keyboard="Numeric"
+                                   Placeholder="Seconds"
+                                   HorizontalTextAlignment="Center"
+                                   Text="{Binding DurationSeconds}" />
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,*,*,*"
+                              ColumnSpacing="8">
+                            <Button Grid.Column="0"
+                                    Text="15s"
+                                    Command="{Binding SetDuration15Command}"
+                                    Style="{StaticResource SecondaryButtonStyle}"
+                                    HeightRequest="44"
+                                    CornerRadius="16" />
+
+                            <Button Grid.Column="1"
+                                    Text="30s"
+                                    Command="{Binding SetDuration30Command}"
+                                    Style="{StaticResource SecondaryButtonStyle}"
+                                    HeightRequest="44"
+                                    CornerRadius="16" />
+
+                            <Button Grid.Column="2"
+                                    Text="60s"
+                                    Command="{Binding SetDuration60Command}"
+                                    Style="{StaticResource SecondaryButtonStyle}"
+                                    HeightRequest="44"
+                                    CornerRadius="16" />
+
+                            <Button Grid.Column="3"
+                                    Text="5m"
+                                    Command="{Binding SetDuration300Command}"
+                                    Style="{StaticResource SecondaryButtonStyle}"
+                                    HeightRequest="44"
+                                    CornerRadius="16" />
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <Grid ColumnDefinitions="*,*"
+                          ColumnSpacing="12">
+                        <Button Grid.Column="0"
+                                Text="Start Capture"
+                                Command="{Binding StartCommand}"
+                                IsEnabled="{Binding CanStart}"
+                                HeightRequest="58"
+                                CornerRadius="22"
+                                FontAttributes="Bold" />
+
+                        <Button Grid.Column="1"
+                                Text="Stop"
+                                Command="{Binding StopCommand}"
+                                IsEnabled="{Binding CanStop}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                HeightRequest="58"
+                                CornerRadius="22"
+                                FontAttributes="Bold" />
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Metrics -->
+            <Grid ColumnDefinitions="*,*"
+                  ColumnSpacing="12">
+
+                <Frame Padding="18"
+                       CornerRadius="28"
+                       HasShadow="False"
+                       BackgroundColor="#111827"
+                       BorderColor="#26324A">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Packets seen"
+                               FontSize="13"
+                               TextColor="#AAB7CC" />
+
+                        <Label Text="{Binding PacketsSeen}"
+                               FontAttributes="Bold"
+                               FontSize="30"
+                               TextColor="#F8FAFC" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Frame Grid.Column="1"
+                       Padding="18"
+                       CornerRadius="28"
+                       HasShadow="False"
+                       BackgroundColor="#111827"
+                       BorderColor="#26324A">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Written"
+                               FontSize="13"
+                               TextColor="#AAB7CC" />
+
+                        <Label Text="{Binding PacketsWritten}"
+                               FontAttributes="Bold"
+                               FontSize="30"
+                               TextColor="#F8FAFC" />
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <!-- Output -->
+            <Frame Padding="22"
+                   CornerRadius="32"
+                   HasShadow="False"
+                   BackgroundColor="#111827"
+                   BorderColor="#26324A">
+
+                <VerticalStackLayout Spacing="16">
+
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0"
+                                             Spacing="4">
+                            <Label Text="Output"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   TextColor="#F8FAFC" />
+
+                            <Label Text="{Binding OutputSummaryText}"
+                                   FontSize="14"
+                                   TextColor="#AAB7CC"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <Frame Grid.Column="1"
+                               Padding="12,7"
+                               CornerRadius="999"
+                               HasShadow="False"
+                               BackgroundColor="#182238"
+                               BorderColor="#26324A"
+                               VerticalOptions="Start">
+                            <Label Text="PCAPNG"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="#B693FF" />
+                        </Frame>
+                    </Grid>
+
+                    <Frame Padding="14"
+                           CornerRadius="20"
+                           HasShadow="False"
+                           BackgroundColor="#0B1220"
+                           BorderColor="#1E2A44">
+                        <Label Text="{Binding OutputPath}"
+                               FontSize="12"
+                               TextColor="#D6E0F0"
+                               LineBreakMode="WordWrap" />
+                    </Frame>
+
+                    <Grid ColumnDefinitions="*,*"
+                          ColumnSpacing="12">
+                        <Button Grid.Column="0"
+                                Text="Copy Path"
+                                Command="{Binding CopyOutputPathCommand}"
+                                IsEnabled="{Binding HasOutput}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                HeightRequest="50"
+                                CornerRadius="20" />
+
+                        <Button Grid.Column="1"
+                                Text="Share Capture"
+                                Command="{Binding ShareCaptureCommand}"
+                                IsEnabled="{Binding HasOutput}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                HeightRequest="50"
+                                CornerRadius="20" />
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Detections -->
+            <Frame Padding="22"
+                   CornerRadius="32"
+                   HasShadow="False"
+                   BackgroundColor="#111827"
+                   BorderColor="#26324A">
+
+                <VerticalStackLayout Spacing="16">
+
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0"
+                                             Spacing="4">
+                            <Label Text="Detections"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   TextColor="#F8FAFC" />
+
+                            <Label Text="{Binding DetectionSummaryText}"
+                                   FontSize="14"
+                                   TextColor="#AAB7CC"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <Frame Grid.Column="1"
+                               Padding="12,7"
+                               CornerRadius="999"
+                               HasShadow="False"
+                               BackgroundColor="#182238"
+                               BorderColor="#26324A"
+                               VerticalOptions="Start">
+                            <Label Text="{Binding DetectionCountText}"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="#B693FF" />
+                        </Frame>
+                    </Grid>
+
+                    <Frame IsVisible="{Binding HasDetections}"
+                           Padding="0"
+                           CornerRadius="24"
+                           HasShadow="False"
+                           BackgroundColor="#0B1220"
+                           BorderColor="#1E2A44">
+
+                        <VerticalStackLayout Padding="14"
+                                             Spacing="12"
+                                             BindableLayout.ItemsSource="{Binding Detections}">
+
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="models:CaptureDetectionModel">
+                                    <Frame Padding="16"
+                                           CornerRadius="22"
+                                           HasShadow="False"
+                                           BackgroundColor="#111827"
+                                           BorderColor="#26324A">
+                                        <VerticalStackLayout Spacing="8">
+                                            <Grid ColumnDefinitions="*,Auto"
+                                                  ColumnSpacing="12">
+                                                <Label Grid.Column="0"
+                                                       Text="{Binding Title}"
+                                                       FontSize="17"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#F8FAFC"
+                                                       LineBreakMode="WordWrap" />
+
+                                                <Frame Grid.Column="1"
+                                                       Padding="10,6"
+                                                       CornerRadius="999"
+                                                       HasShadow="False"
+                                                       BackgroundColor="#182238"
+                                                       BorderColor="#26324A">
+                                                    <Label Text="{Binding Count, StringFormat='x{0}'}"
+                                                           FontSize="12"
+                                                           FontAttributes="Bold"
+                                                           TextColor="#B693FF" />
+                                                </Frame>
+                                            </Grid>
+
+                                            <Label Text="{Binding Description}"
+                                                   FontSize="14"
+                                                   TextColor="#AAB7CC"
+                                                   LineBreakMode="WordWrap" />
+                                        </VerticalStackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame IsVisible="{Binding HasNoDetections}"
+                           Padding="18"
+                           CornerRadius="24"
+                           HasShadow="False"
+                           BackgroundColor="#0B1220"
+                           BorderColor="#1E2A44">
+                        <Label Text="No detections yet. Run a capture and Vyre will surface notable traffic patterns here."
+                               FontSize="14"
+                               TextColor="#AAB7CC"
+                               LineBreakMode="WordWrap" />
+                    </Frame>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Error -->
+            <Frame IsVisible="{Binding HasError}"
+                   Padding="18"
+                   CornerRadius="24"
+                   HasShadow="False"
+                   BackgroundColor="#2A1018"
+                   BorderColor="#7F1D1D">
+                <Label Text="{Binding ErrorMessage}"
+                       FontSize="14"
+                       TextColor="#FCA5A5"
+                       LineBreakMode="WordWrap" />
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

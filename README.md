@@ -1,19 +1,21 @@
 # Vyre  
-### Cross-Platform Wi-Fi Analyzer & Diagnostics Suite
+### Cross-Platform Wi‑Fi Analyzer & Diagnostics Suite
 
 ![Build](https://img.shields.io/badge/build-CI%20green-brightgreen)
 ![Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20Android%20%7C%20iOS-blue)
 ![Linux](https://img.shields.io/badge/Linux-core%20%2B%20CLI-informational)
 ![Language](https://img.shields.io/badge/C%2B%2B20-%2300599C?logo=c%2B%2B&logoColor=white)
 ![UI](https://img.shields.io/badge/.NET%20MAUI-UI-purple)
+![Local First](https://img.shields.io/badge/local--first-no%20cloud-black)
 ![License](https://img.shields.io/badge/license-Proprietary-lightgrey)
 
-**Vyre** is a sleek, modern, cross-platform Wi‑Fi analysis application built for engineers and researchers who want **clarity instead of noise**.
+**Vyre** is a sleek, modern, cross-platform Wi‑Fi analysis application built for engineers, researchers, and curious humans who want **clarity instead of noise**. 🛜✨
 
 It combines a **high‑performance C++ networking engine** with a **.NET MAUI user interface**, delivering actionable wireless insights across **Windows, Android, and iOS**, with **Linux supported via the shared core and CLI**.
 
 No fake theatrics.  
 No bloated dashboards.  
+No “it works because the spinner says so” nonsense.  
 Just clean data, real diagnostics, and a UI that stays out of your way.
 
 ---
@@ -36,6 +38,12 @@ Just clean data, real diagnostics, and a UI that stays out of your way.
 - Offline‑ready HTML reports with bundled assets
 - Scan history and comparison (new / removed / changed networks)
 
+### 📱 Per-App Network Usage
+- Android per-app usage via OS-supported APIs
+- Windows usage data where platform support allows it
+- iOS limitation handling without pretending Apple gave us magic keys
+- Filters for Wi‑Fi / mobile / all and 24h / 7d / 30d views
+
 ### 🖥️ Modern Cross‑Platform UI
 - Built with **.NET MAUI**
 - Clean MVVM architecture
@@ -49,30 +57,24 @@ Just clean data, real diagnostics, and a UI that stays out of your way.
 
 ---
 
-## 🧱 Architecture Overview
-
-```
-Vyre
-├── wifi-core        # C++20 analysis & diagnostics engine
-│   ├── domain       # Core data models
-│   ├── analysis     # Heuristics & insights
-│   ├── export       # JSON / CSV / HTML
-│   └── platform     # OS-specific scanners
-│
-├── wifi-interop     # Stable C ABI for interop
-│
-├── wifi-ui-maui     # .NET MAUI application
-│   ├── Views        # UI screens
-│   ├── ViewModels   # MVVM logic
-│   └── Platforms    # Android / iOS / Windows glue
-│
-└── tools            # OUI updater, fixtures, helpers
-```
-
 **Design principles**
 - UI and engine are strictly separated  
 - Platform quirks are isolated, not leaked upward  
 - Shared logic lives once, not three times  
+- Reports are deterministic and testable  
+- Unsupported OS features degrade clearly instead of lying with confidence  
+
+---
+
+## 🧩 Core Modules
+
+| Module | Role | Notes |
+|---|---|---|
+| `wifi-core` | C++ Core Engine | Scanning where allowed, normalization, analysis, report generation, storage |
+| `wifi-interop` | Interop Layer | Stable **C ABI** boundary for P/Invoke |
+| `wifi-ui-maui` | MAUI App | UI, state, navigation, permissions, platform glue |
+| `linux-ui` | Linux UI / CLI | Separate front-end later via Qt/Avalonia, or CLI-first support |
+| `tools` | Support tooling | OUI database updates, fixtures, test helpers, benchmarks |
 
 ---
 
@@ -86,6 +88,19 @@ Vyre
 | Linux | 🧠 Core | CLI support, desktop UI planned |
 
 > Packet capture and monitor mode are **desktop‑only and hardware‑dependent** by design.
+
+---
+
+## 🧭 App Screens
+
+| Screen | Purpose |
+|---|---|
+| **Scan** | Nearby access points, filters, refresh, signal metadata |
+| **Insights** | Ranked issues and practical recommendations |
+| **Reports** | History, export/share, and scan comparisons |
+| **Usage** | Per-app network usage where the OS allows it |
+| **Settings** | Interface selection, scan interval, privacy toggles |
+| **Doctor** | Capabilities, permissions, limitations, and platform sanity checks |
 
 ---
 
@@ -113,7 +128,7 @@ Install the app and grant required network permissions.
 - No background uploads  
 - All analysis runs locally and deterministically  
 
-Your networks stay yours.
+Your networks stay yours. Radical concept, apparently. 🔒
 
 ---
 
@@ -121,9 +136,33 @@ Your networks stay yours.
 
 - **C++20** — core analysis engine  
 - **.NET MAUI** — cross‑platform UI  
+- **C ABI + P/Invoke** — stable native bridge  
 - **libpcap / Npcap** — optional desktop capture  
 - **SQLite / JSON** — local storage  
 - **CMake + CI** — reproducible builds  
+
+---
+
+## 📶 Usage Module Architecture
+
+The **Usage** tab shows app-level network activity where the OS exposes that data. It tracks upload/download totals, current network type, top talkers, and timeframe-based trends.
+
+```
+src/dotnet/Vyre.App/Pages/UsagePage.xaml
+src/dotnet/Vyre.App/Pages/UsagePage.xaml.cs
+src/dotnet/Vyre.App/ViewModels/UsageViewModel.cs
+src/dotnet/Vyre.App/Models/AppNetworkUsageModel.cs
+src/dotnet/Vyre.App/Services/Usage/IAppNetworkUsageService.cs
+src/dotnet/Vyre.App/Services/Usage/AppNetworkUsageService.shared.cs
+src/dotnet/Vyre.App/Services/Usage/AppNetworkUsageService.android.cs
+src/dotnet/Vyre.App/Services/Usage/AppNetworkUsageService.windows.cs
+src/dotnet/Vyre.App/Services/Usage/AppNetworkUsageService.ios.cs
+```
+
+**Platform behavior**
+- **Android:** real per-app usage via `NetworkStatsManager`, mapped from UID to installed apps
+- **Windows:** usage data where supported, clearly labeled as Windows-specific sourcing
+- **iOS:** no fake “other apps usage” screen; shows a limitation card and app-owned diagnostics/history instead
 
 ---
 
@@ -133,15 +172,15 @@ Vyre is motivated by a practical research question:
 
 > **How can we construct accurate, explainable wireless diagnostics when measurement capabilities are heterogeneous, incomplete, and constrained by modern operating systems?**
 
-Contemporary platforms (especially mobile OSes) restrict low‑level network visibility, creating an inherent gap between the phenomena of interest (e.g., interference, misconfiguration, insecure deployments, roaming instability) and what can be directly observed. Vyre is designed as a systems‑oriented study in **cross‑platform observability**, where the central challenge is to derive high‑value inferences from **partial and non‑uniform measurements** while remaining transparent about uncertainty.
+Contemporary platforms, especially mobile OSes, restrict low‑level network visibility. That creates a real gap between the phenomena of interest — interference, misconfiguration, insecure deployments, roaming instability — and what can be directly observed. Vyre is designed as a systems‑oriented study in **cross‑platform observability**, where the central challenge is to derive high‑value inferences from **partial and non‑uniform measurements** while remaining transparent about uncertainty.
 
 The project provides a foundation for investigating:
-- **Normalization under heterogeneity:** mapping platform‑specific measurements (signal indicators, security descriptors, channel/frequency reporting) into a unified, versioned representation.
-- **Explainable heuristic inference:** producing diagnostics with explicit evidence and traceable decision rules rather than opaque scoring.
-- **Robust degradation:** formalizing “graceful fallback” behavior when specific measurements are unavailable, without silently biasing conclusions.
-- **Reproducibility and evaluation:** enabling deterministic exports (JSON/CSV/HTML) that support offline analysis, longitudinal comparisons, and benchmarking against controlled testbeds.
+- **Normalization under heterogeneity:** mapping platform‑specific measurements into a unified, versioned representation
+- **Explainable heuristic inference:** producing diagnostics with explicit evidence and traceable decision rules rather than opaque scoring
+- **Robust degradation:** formalizing graceful fallback behavior when measurements are unavailable, without silently biasing conclusions
+- **Reproducibility and evaluation:** enabling deterministic exports that support offline analysis, longitudinal comparison, and benchmarking
 
-Beyond its utility as an end‑user tool, Vyre is structured to support future research extensions including management‑frame analysis, capture‑assisted validation on desktop platforms, and quantitative evaluation of diagnostic accuracy under varying observability constraints.
+Beyond its utility as an end‑user tool, Vyre is structured to support future extensions including management‑frame analysis, capture‑assisted validation on desktop platforms, and quantitative evaluation of diagnostic accuracy under varying observability constraints.
 
 ---
 
@@ -152,6 +191,7 @@ Beyond its utility as an end‑user tool, Vyre is structured to support future r
 - Monitor mode & 802.11 frame decoding (Linux‑first)
 - Advanced spectrum analytics
 - Research‑grade reporting profiles
+- Benchmarks for scan latency, report generation, and analyzer stability
 
 ---
 
@@ -182,8 +222,8 @@ Wireless analysis tools should be:
 - Respectful of OS boundaries  
 - Pleasant to use  
 
-Vyre exists because too many tools fail at at least two of those.
+Vyre exists because too many tools fail at at least two of those, then somehow still ship with a settings page nobody asked for.
 
 ---
 
-**Vyre** — clarity in the airwaves.
+**Vyre** — clarity in the airwaves. 🛜

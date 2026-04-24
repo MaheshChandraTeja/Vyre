@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Vyre.App.Pages.UsagePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Vyre.App.ViewModels"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Title="Usage"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource PageBackgroundColor}">
+
+    <CollectionView ItemsSource="{Binding UsageItems}"
+                    SelectionMode="None"
+                    BackgroundColor="{StaticResource PageBackgroundColor}">
+
+        <CollectionView.ItemsLayout>
+            <LinearItemsLayout Orientation="Vertical"
+                               ItemSpacing="14" />
+        </CollectionView.ItemsLayout>
+
+        <CollectionView.Header>
+            <VerticalStackLayout Padding="24,28,24,18"
+                                 Spacing="20"
+                                 BackgroundColor="{StaticResource PageBackgroundColor}">
+
+                <!-- Header -->
+                <VerticalStackLayout Spacing="8">
+                    <HorizontalStackLayout Spacing="12"
+                                           VerticalOptions="Center">
+                        <Image Source="usage.png"
+                               WidthRequest="38"
+                               HeightRequest="38"
+                               Aspect="AspectFit"
+                               VerticalOptions="Center">
+                            <Image.Behaviors>
+                                <toolkit:IconTintColorBehavior TintColor="#F8FAFC" />
+                            </Image.Behaviors>
+                        </Image>
+
+                        <Label Text="Usage"
+                               Style="{StaticResource PageTitleLabelStyle}"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <Label Text="Per-app network usage, top talkers, and readable data totals."
+                           Style="{StaticResource PageSubtitleLabelStyle}" />
+                </VerticalStackLayout>
+
+                <!-- Summary card -->
+                <Frame Padding="24"
+                       CornerRadius="34"
+                       HasShadow="False"
+                       BackgroundColor="{StaticResource SurfaceAltColor}"
+                       BorderColor="{StaticResource BorderColor}">
+
+                    <VerticalStackLayout Spacing="18">
+
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="14">
+
+                            <VerticalStackLayout Grid.Column="0"
+                                                 Spacing="5"
+                                                 VerticalOptions="Center">
+                                <Label Text="Network activity"
+                                       FontSize="24"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource PrimaryTextColor}"
+                                       LineBreakMode="TailTruncation"
+                                       MaxLines="1" />
+
+                                <Label Text="{Binding UsageInsightText}"
+                                       FontSize="14"
+                                       TextColor="{StaticResource SecondaryTextColor}"
+                                       LineBreakMode="WordWrap"
+                                       MaxLines="3" />
+                            </VerticalStackLayout>
+
+                            <Border Grid.Column="1"
+                                    Padding="12,7"
+                                    Stroke="{StaticResource BorderColor}"
+                                    StrokeThickness="1"
+                                    BackgroundColor="{StaticResource SurfaceRaisedColor}"
+                                    StrokeShape="RoundRectangle 999"
+                                    VerticalOptions="Start">
+
+                                <Label Text="{Binding CurrentNetworkType}"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource AccentSoftColor}"
+                                       LineBreakMode="NoWrap"
+                                       MaxLines="1" />
+                            </Border>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,*,*"
+                              ColumnSpacing="10">
+
+                            <Frame Padding="14"
+                                   CornerRadius="22"
+                                   HasShadow="False"
+                                   BackgroundColor="#0B1220"
+                                   BorderColor="{StaticResource BorderColor}">
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="Total"
+                                           FontSize="12"
+                                           TextColor="{StaticResource SecondaryTextColor}" />
+
+                                    <Label Text="{Binding TotalCombinedText}"
+                                           FontSize="20"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource PrimaryTextColor}"
+                                           LineBreakMode="TailTruncation"
+                                           MaxLines="1" />
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <Frame Grid.Column="1"
+                                   Padding="14"
+                                   CornerRadius="22"
+                                   HasShadow="False"
+                                   BackgroundColor="#0B1220"
+                                   BorderColor="{StaticResource BorderColor}">
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="Upload"
+                                           FontSize="12"
+                                           TextColor="{StaticResource SecondaryTextColor}" />
+
+                                    <Label Text="{Binding TotalUploadText}"
+                                           FontSize="20"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource PrimaryTextColor}"
+                                           LineBreakMode="TailTruncation"
+                                           MaxLines="1" />
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <Frame Grid.Column="2"
+                                   Padding="14"
+                                   CornerRadius="22"
+                                   HasShadow="False"
+                                   BackgroundColor="#0B1220"
+                                   BorderColor="{StaticResource BorderColor}">
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="Download"
+                                           FontSize="12"
+                                           TextColor="{StaticResource SecondaryTextColor}" />
+
+                                    <Label Text="{Binding TotalDownloadText}"
+                                           FontSize="20"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource PrimaryTextColor}"
+                                           LineBreakMode="TailTruncation"
+                                           MaxLines="1" />
+                                </VerticalStackLayout>
+                            </Frame>
+                        </Grid>
+
+                        <Frame Padding="14"
+                               CornerRadius="22"
+                               HasShadow="False"
+                               BackgroundColor="#0B1220"
+                               BorderColor="{StaticResource BorderColor}">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="Top talkers"
+                                       FontSize="12"
+                                       TextColor="{StaticResource SecondaryTextColor}" />
+
+                                <Label Text="{Binding TopTalkersText}"
+                                       FontSize="14"
+                                       TextColor="{StaticResource PrimaryTextColor}"
+                                       LineBreakMode="WordWrap"
+                                       MaxLines="3" />
+                            </VerticalStackLayout>
+                        </Frame>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Search -->
+                <Frame Padding="16"
+                       CornerRadius="28"
+                       HasShadow="False"
+                       BackgroundColor="{StaticResource SurfaceColor}"
+                       BorderColor="{StaticResource BorderColor}">
+
+                    <VerticalStackLayout Spacing="12">
+
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0"
+                                                 Spacing="4"
+                                                 VerticalOptions="Center">
+                                <Label Text="Find an app"
+                                       FontSize="20"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource PrimaryTextColor}" />
+
+                                <Label Text="{Binding ResultCountText}"
+                                       FontSize="13"
+                                       TextColor="{StaticResource SecondaryTextColor}"
+                                       LineBreakMode="WordWrap" />
+                            </VerticalStackLayout>
+
+                            <Button Grid.Column="1"
+                                    Text="Refresh"
+                                    Command="{Binding RefreshCommand}"
+                                    WidthRequest="116"
+                                    HeightRequest="48"
+                                    CornerRadius="18"
+                                    FontAttributes="Bold" />
+                        </Grid>
+
+                        <SearchBar Text="{Binding SearchText}"
+                                   Placeholder="Search app name or package id"
+                                   BackgroundColor="#0B1220"
+                                   TextColor="{StaticResource PrimaryTextColor}"
+                                   PlaceholderColor="{StaticResource MutedTextColor}" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Friendlier filter panel, replacing the ugly 3-picker brick -->
+                <Frame Padding="18"
+                       CornerRadius="30"
+                       HasShadow="False"
+                       BackgroundColor="{StaticResource SurfaceColor}"
+                       BorderColor="{StaticResource BorderColor}">
+
+                    <VerticalStackLayout Spacing="16">
+
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0"
+                                                 Spacing="4"
+                                                 VerticalOptions="Center">
+                                <Label Text="Sort &amp; filter"
+                                       FontSize="21"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource PrimaryTextColor}" />
+
+                                <Label Text="{Binding FilterSummary}"
+                                       FontSize="13"
+                                       TextColor="{StaticResource SecondaryTextColor}"
+                                       LineBreakMode="WordWrap"
+                                       MaxLines="2" />
+                            </VerticalStackLayout>
+
+                            <Border Grid.Column="1"
+                                    Padding="12,7"
+                                    Stroke="{StaticResource BorderColor}"
+                                    StrokeThickness="1"
+                                    BackgroundColor="{StaticResource SurfaceRaisedColor}"
+                                    StrokeShape="RoundRectangle 999"
+                                    VerticalOptions="Start">
+                                <Label Text="{Binding SelectedTimeRange}"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource AccentSoftColor}" />
+                            </Border>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,*"
+                              RowDefinitions="Auto,Auto"
+                              ColumnSpacing="12"
+                              RowSpacing="12">
+
+                            <VerticalStackLayout Spacing="7">
+                                <Label Text="Network"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource SecondaryTextColor}" />
+
+                                <Picker ItemsSource="{Binding NetworkScopeOptions}"
+                                        SelectedItem="{Binding SelectedNetworkScope}"
+                                        Title="Network" />
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="1"
+                                                 Spacing="7">
+                                <Label Text="Time range"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource SecondaryTextColor}" />
+
+                                <Picker ItemsSource="{Binding TimeRangeOptions}"
+                                        SelectedItem="{Binding SelectedTimeRange}"
+                                        Title="Time range" />
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Row="1"
+                                                 Spacing="7">
+                                <Label Text="Sort by"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource SecondaryTextColor}" />
+
+                                <Picker ItemsSource="{Binding SortOptions}"
+                                        SelectedItem="{Binding SelectedSort}"
+                                        Title="Sort" />
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Row="1"
+                                                 Grid.Column="1"
+                                                 Spacing="7">
+                                <Label Text="Activity"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource SecondaryTextColor}" />
+
+                                <Picker ItemsSource="{Binding ActivityFilterOptions}"
+                                        SelectedItem="{Binding SelectedActivityFilter}"
+                                        Title="Activity" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Access / availability -->
+                <Frame IsVisible="{Binding HasAvailabilityMessage}"
+                       Padding="18"
+                       CornerRadius="26"
+                       HasShadow="False"
+                       BackgroundColor="#0B1220"
+                       BorderColor="{StaticResource BorderColor}">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="{Binding AvailabilityMessage}"
+                               FontSize="14"
+                               TextColor="{StaticResource SecondaryTextColor}"
+                               LineBreakMode="WordWrap" />
+
+                        <Button Text="Open Usage Access"
+                                Command="{Binding OpenAccessSettingsCommand}"
+                                IsVisible="{Binding ShowAccessButton}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                HeightRequest="48"
+                                CornerRadius="18" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Frame IsVisible="{Binding HasNoItems}"
+                       Padding="18"
+                       CornerRadius="26"
+                       HasShadow="False"
+                       BackgroundColor="#0B1220"
+                       BorderColor="{StaticResource BorderColor}">
+                    <Label Text="No app usage matches this view. Try clearing search, lowering the activity filter, or switching to 7d / 30d."
+                           FontSize="14"
+                           TextColor="{StaticResource SecondaryTextColor}"
+                           LineBreakMode="WordWrap" />
+                </Frame>
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                   IsVisible="{Binding IsBusy}" />
+
+                <Frame IsVisible="{Binding HasError}"
+                       Padding="18"
+                       CornerRadius="24"
+                       HasShadow="False"
+                       BackgroundColor="#2A1018"
+                       BorderColor="#7F1D1D">
+                    <Label Text="{Binding ErrorMessage}"
+                           FontSize="14"
+                           TextColor="#FCA5A5"
+                           LineBreakMode="WordWrap" />
+                </Frame>
+
+                <Grid ColumnDefinitions="*,Auto"
+                      Margin="0,4,0,0">
+                    <Label Grid.Column="0"
+                           Text="Apps"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Label Grid.Column="1"
+                           Text="{Binding LastUpdatedText}"
+                           FontSize="12"
+                           TextColor="{StaticResource MutedTextColor}"
+                           VerticalOptions="Center" />
+                </Grid>
+
+            </VerticalStackLayout>
+        </CollectionView.Header>
+
+        <CollectionView.ItemTemplate>
+            <DataTemplate x:DataType="vm:UsageViewModel+UsageAppRowViewModel">
+                <Frame Margin="24,0,24,0"
+                       Padding="18"
+                       CornerRadius="28"
+                       HasShadow="False"
+                       BackgroundColor="{StaticResource SurfaceColor}"
+                       BorderColor="{StaticResource BorderColor}">
+
+                    <VerticalStackLayout Spacing="14">
+
+                        <Grid ColumnDefinitions="Auto,*,Auto"
+                              ColumnSpacing="14">
+
+                            <Border Grid.Column="0"
+                                    WidthRequest="48"
+                                    HeightRequest="48"
+                                    Stroke="{StaticResource BorderColor}"
+                                    StrokeThickness="1"
+                                    BackgroundColor="{StaticResource AccentMutedColor}"
+                                    StrokeShape="RoundRectangle 20"
+                                    VerticalOptions="Start">
+
+                                <Label Text="{Binding Initial}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource AccentSoftColor}"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalTextAlignment="Center" />
+                            </Border>
+
+                            <VerticalStackLayout Grid.Column="1"
+                                                 Spacing="4"
+                                                 VerticalOptions="Center">
+                                <Label Text="{Binding AppName}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource PrimaryTextColor}"
+                                       LineBreakMode="TailTruncation"
+                                       MaxLines="1" />
+
+                                <Label Text="{Binding PackageDisplay}"
+                                       FontSize="12"
+                                       TextColor="{StaticResource SecondaryTextColor}"
+                                       LineBreakMode="TailTruncation"
+                                       MaxLines="1" />
+
+                                <Label Text="{Binding LastActiveText}"
+                                       FontSize="12"
+                                       TextColor="{StaticResource MutedTextColor}"
+                                       LineBreakMode="TailTruncation"
+                                       MaxLines="1" />
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout Grid.Column="2"
+                                                 Spacing="3"
+                                                 HorizontalOptions="End"
+                                                 VerticalOptions="Start">
+                                <Label Text="{Binding TotalText}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource PrimaryTextColor}"
+                                       HorizontalTextAlignment="End"
+                                       LineBreakMode="NoWrap"
+                                       MaxLines="1" />
+
+                                <Label Text="total"
+                                       FontSize="11"
+                                       TextColor="{StaticResource SecondaryTextColor}"
+                                       HorizontalTextAlignment="End" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <ProgressBar Progress="{Binding TotalShareProgress}"
+                                     HeightRequest="7"
+                                     ProgressColor="{StaticResource AccentSoftColor}"
+                                     BackgroundColor="{StaticResource SurfaceRaisedColor}" />
+
+                        <Grid ColumnDefinitions="*,*"
+                              ColumnSpacing="12">
+                            <Frame Padding="14"
+                                   CornerRadius="20"
+                                   HasShadow="False"
+                                   BackgroundColor="#0B1220"
+                                   BorderColor="{StaticResource BorderColor}">
+                                <VerticalStackLayout Spacing="3">
+                                    <Label Text="Upload"
+                                           FontSize="12"
+                                           TextColor="{StaticResource SecondaryTextColor}" />
+
+                                    <Label Text="{Binding UploadText}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource PrimaryTextColor}"
+                                           LineBreakMode="NoWrap"
+                                           MaxLines="1" />
+                                </VerticalStackLayout>
+                            </Frame>
+
+                            <Frame Grid.Column="1"
+                                   Padding="14"
+                                   CornerRadius="20"
+                                   HasShadow="False"
+                                   BackgroundColor="#0B1220"
+                                   BorderColor="{StaticResource BorderColor}">
+                                <VerticalStackLayout Spacing="3">
+                                    <Label Text="Download"
+                                           FontSize="12"
+                                           TextColor="{StaticResource SecondaryTextColor}" />
+
+                                    <Label Text="{Binding DownloadText}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource PrimaryTextColor}"
+                                           LineBreakMode="NoWrap"
+                                           MaxLines="1" />
+                                </VerticalStackLayout>
+                            </Frame>
+                        </Grid>
+
+                    </VerticalStackLayout>
+                </Frame>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+
+        <CollectionView.Footer>
+            <BoxView HeightRequest="34"
+                     Color="Transparent" />
+        </CollectionView.Footer>
+
+    </CollectionView>
+</ContentPage>

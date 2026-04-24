@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Vyre.App.Pages.ReportsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:Vyre.App.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Title="Reports"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource PageBackgroundColor}">
+
+    <Grid BackgroundColor="{StaticResource PageBackgroundColor}">
+
+        <CollectionView
+            ItemsSource="{Binding Reports}"
+            SelectionMode="None"
+            BackgroundColor="{StaticResource PageBackgroundColor}">
+
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical"
+                                   ItemSpacing="14" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.Header>
+                <VerticalStackLayout Padding="24,28,24,18"
+                                     Spacing="20">
+
+                    <VerticalStackLayout Spacing="8">
+                        <HorizontalStackLayout Spacing="12"
+                                               VerticalOptions="Center">
+
+                            <Image Source="reports.png"
+                                   WidthRequest="38"
+                                   HeightRequest="38"
+                                   Aspect="AspectFit"
+                                   VerticalOptions="Center">
+                                <Image.Behaviors>
+                                    <toolkit:IconTintColorBehavior TintColor="#F8FAFC" />
+                                </Image.Behaviors>
+                            </Image>
+
+                            <Label Text="Reports"
+                                   Style="{StaticResource PageTitleLabelStyle}"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+
+                        <Label Text="Saved scan reports, structured evidence, and export-ready JSON."
+                               Style="{StaticResource PageSubtitleLabelStyle}" />
+                    </VerticalStackLayout>
+
+                    <Frame Padding="22"
+                           CornerRadius="30"
+                           HasShadow="False"
+                           BackgroundColor="#111827"
+                           BorderColor="#26324A">
+
+                        <VerticalStackLayout Spacing="18">
+
+                            <Grid ColumnDefinitions="*,Auto"
+                                  ColumnSpacing="14">
+
+                                <VerticalStackLayout Grid.Column="0"
+                                                     Spacing="5">
+                                    <Label Text="Report center"
+                                           FontSize="22"
+                                           FontAttributes="Bold"
+                                           TextColor="#F8FAFC"
+                                           LineBreakMode="TailTruncation" />
+
+                                    <Label Text="Refresh saved reports and open detailed report payloads."
+                                           FontSize="15"
+                                           TextColor="#AAB7CC"
+                                           LineBreakMode="WordWrap" />
+                                </VerticalStackLayout>
+
+                                <Frame Grid.Column="1"
+                                       Padding="12,7"
+                                       CornerRadius="999"
+                                       HasShadow="False"
+                                       BackgroundColor="#182238"
+                                       BorderColor="#26324A"
+                                       VerticalOptions="Start">
+                                    <Label Text="Local"
+                                           FontSize="12"
+                                           FontAttributes="Bold"
+                                           TextColor="#B693FF" />
+                                </Frame>
+                            </Grid>
+
+                            <Button Text="Refresh Reports"
+                                    Command="{Binding RefreshCommand}"
+                                    HeightRequest="56"
+                                    CornerRadius="22"
+                                    FontAttributes="Bold" />
+
+                            <Button Text="Create Dummy Report"
+                                    Command="{Binding AddDummyReportCommand}"
+                                    IsVisible="False" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Grid ColumnDefinitions="*,Auto"
+                          Margin="0,4,0,0">
+                        <Label Grid.Column="0"
+                               Text="Saved reports"
+                               FontSize="24"
+                               FontAttributes="Bold"
+                               TextColor="#F8FAFC" />
+
+                        <Label Grid.Column="1"
+                               Text="Open as JSON"
+                               FontSize="13"
+                               TextColor="#AAB7CC"
+                               VerticalOptions="Center" />
+                    </Grid>
+
+                </VerticalStackLayout>
+            </CollectionView.Header>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:ReportSummary">
+                    <Frame Margin="24,0,24,0"
+                           Padding="20"
+                           CornerRadius="30"
+                           HasShadow="False"
+                           BackgroundColor="#111827"
+                           BorderColor="#26324A">
+
+                        <VerticalStackLayout Spacing="16">
+
+                            <Grid ColumnDefinitions="*,Auto"
+                                  ColumnSpacing="12">
+
+                                <VerticalStackLayout Grid.Column="0"
+                                                     Spacing="6">
+                                    <Label Text="{Binding Title}"
+                                           FontSize="21"
+                                           FontAttributes="Bold"
+                                           TextColor="#F8FAFC"
+                                           LineBreakMode="TailTruncation"
+                                           MaxLines="1" />
+
+                                    <Label Text="{Binding CreatedUtc, StringFormat='Created {0:yyyy-MM-dd HH:mm:ss} UTC'}"
+                                           FontSize="13"
+                                           TextColor="#AAB7CC"
+                                           LineBreakMode="TailTruncation"
+                                           MaxLines="1" />
+                                </VerticalStackLayout>
+
+                                <Frame Grid.Column="1"
+                                       Padding="12,7"
+                                       CornerRadius="999"
+                                       HasShadow="False"
+                                       BackgroundColor="#182238"
+                                       BorderColor="#26324A"
+                                       VerticalOptions="Start">
+                                    <Label Text="JSON"
+                                           FontSize="12"
+                                           FontAttributes="Bold"
+                                           TextColor="#B693FF" />
+                                </Frame>
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*,*"
+                                  ColumnSpacing="12">
+
+                                <Frame Padding="16"
+                                       CornerRadius="22"
+                                       HasShadow="False"
+                                       BackgroundColor="#0B1220"
+                                       BorderColor="#1E2A44">
+                                    <VerticalStackLayout Spacing="4">
+                                        <Label Text="Networks"
+                                               FontSize="13"
+                                               TextColor="#AAB7CC" />
+
+                                        <Label Text="{Binding NetworkCount}"
+                                               FontSize="26"
+                                               FontAttributes="Bold"
+                                               TextColor="#F8FAFC" />
+                                    </VerticalStackLayout>
+                                </Frame>
+
+                                <Frame Grid.Column="1"
+                                       Padding="16"
+                                       CornerRadius="22"
+                                       HasShadow="False"
+                                       BackgroundColor="#0B1220"
+                                       BorderColor="#1E2A44">
+                                    <VerticalStackLayout Spacing="4">
+                                        <Label Text="Issues"
+                                               FontSize="13"
+                                               TextColor="#AAB7CC" />
+
+                                        <Label Text="{Binding IssueCount}"
+                                               FontSize="26"
+                                               FontAttributes="Bold"
+                                               TextColor="#F8FAFC" />
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </Grid>
+
+                            <Button Text="Open JSON"
+                                    HeightRequest="54"
+                                    CornerRadius="22"
+                                    FontAttributes="Bold"
+                                    Style="{StaticResource SecondaryButtonStyle}"
+                                    Clicked="OnOpenJsonClicked" />
+
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.Footer>
+                <BoxView HeightRequest="34"
+                         Color="Transparent" />
+            </CollectionView.Footer>
+        </CollectionView>
+
+        <!-- JSON pop-out overlay -->
+        <Grid x:Name="JsonModal"
+              IsVisible="False"
+              BackgroundColor="#AA000000"
+              Padding="18">
+
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnJsonBackdropTapped" />
+            </Grid.GestureRecognizers>
+
+            <Frame CornerRadius="32"
+                   Padding="0"
+                   HasShadow="False"
+                   BackgroundColor="#111827"
+                   BorderColor="#33415F"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Fill">
+
+                <Grid RowDefinitions="Auto,*"
+                      MaximumHeightRequest="620">
+
+                    <Grid Grid.Row="0"
+                          Padding="20,18"
+                          ColumnDefinitions="*,Auto"
+                          BackgroundColor="#151F33">
+
+                        <VerticalStackLayout Grid.Column="0"
+                                            Spacing="3">
+                            <Label x:Name="JsonTitle"
+                                Text="report.json"
+                                FontSize="21"
+                                FontAttributes="Bold"
+                                TextColor="#F8FAFC"
+                                LineBreakMode="TailTruncation"
+                                MaxLines="1" />
+
+                            <Label Text="Read-only structured payload"
+                                FontSize="13"
+                                TextColor="#AAB7CC" />
+                        </VerticalStackLayout>
+
+                        <Button Grid.Column="1"
+                                Text="Close"
+                                Clicked="OnCloseJsonClicked"
+                                WidthRequest="88"
+                                HeightRequest="44"
+                                CornerRadius="22"
+                                FontSize="14"
+                                FontAttributes="Bold"
+                                TextColor="#F8FAFC"
+                                BackgroundColor="#1B2740" />
+                    </Grid>
+
+                    <Grid Grid.Row="1"
+                        Padding="16"
+                        BackgroundColor="#0B1220">
+
+                        <Frame Padding="0"
+                            CornerRadius="22"
+                            HasShadow="False"
+                            BackgroundColor="#070D18"
+                            BorderColor="#1E2A44">
+
+                            <Editor x:Name="JsonText"
+                                    IsReadOnly="True"
+                                    AutoSize="Disabled"
+                                    FontFamily="Courier New"
+                                    FontSize="13"
+                                    TextColor="#D6E0F0"
+                                    BackgroundColor="Transparent"
+                                    HeightRequest="420"
+                                    Margin="14"
+                                    VerticalOptions="Fill"
+                                    HorizontalOptions="Fill" />
+                        </Frame>
+                    </Grid>
+                </Grid>
+            </Frame>
+        </Grid>
+
+    </Grid>
+</ContentPage>

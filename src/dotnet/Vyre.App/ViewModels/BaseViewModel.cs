@@ -1,24 +1,15 @@
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Vyre.App.ViewModels;
 
-public abstract class BaseViewModel : INotifyPropertyChanged
+public abstract partial class BaseViewModel : ObservableObject
 {
-    public event PropertyChangedEventHandler? PropertyChanged;
+    [ObservableProperty]
+    private string title = string.Empty;
 
-    protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(storage, value))
-        {
-            return false;
-        }
+    [ObservableProperty]
+    private bool isBusy;
 
-        storage = value;
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        return true;
-    }
-
-    protected void RaisePropertyChanged([CallerMemberName] string? propertyName = null) =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    [ObservableProperty]
+    private string? errorMessage;
 }

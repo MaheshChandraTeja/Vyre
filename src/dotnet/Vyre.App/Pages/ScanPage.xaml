@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Vyre.App.Pages.ScanPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:Vyre.App.Models"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Title="Scan"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource PageBackgroundColor}">
+
+    <ScrollView BackgroundColor="{StaticResource PageBackgroundColor}">
+        <VerticalStackLayout Padding="20,18,20,28"
+                             Spacing="16"
+                             BackgroundColor="{StaticResource PageBackgroundColor}">
+
+            <VerticalStackLayout Spacing="6">
+                <HorizontalStackLayout Spacing="10"
+                                       VerticalOptions="Center">
+                    <Image Source="scan.png"
+                        WidthRequest="38"
+                        HeightRequest="38"
+                        VerticalOptions="Center"
+                        Aspect="AspectFit">
+                        <Image.Behaviors>
+                            <toolkit:IconTintColorBehavior TintColor="#F8FAFC" />
+                        </Image.Behaviors>
+                    </Image>
+
+                    <Label Text="Scan"
+                           VerticalOptions="Center"
+                           Style="{StaticResource PageTitleLabelStyle}" />
+                </HorizontalStackLayout>
+
+                <Label Text="{Binding ScanMetaText}"
+                       Style="{StaticResource PageSubtitleLabelStyle}" />
+            </VerticalStackLayout>
+
+            <Frame>
+                <VerticalStackLayout Spacing="14">
+                    <SearchBar Placeholder="Search SSID, BSSID, vendor, or security"
+                               Text="{Binding SearchText}" />
+
+                    <Grid ColumnDefinitions="*,*"
+                          ColumnSpacing="12">
+                        <Picker Grid.Column="0"
+                                Title="Sort"
+                                ItemsSource="{Binding SortOptions}"
+                                SelectedItem="{Binding SelectedSort}" />
+
+                        <Picker Grid.Column="1"
+                                Title="Band"
+                                ItemsSource="{Binding BandOptions}"
+                                SelectedItem="{Binding SelectedBand}" />
+                    </Grid>
+
+                    <HorizontalStackLayout Spacing="10">
+                        <CheckBox IsChecked="{Binding ShowOnlyOpenNetworks}" />
+                        <Label VerticalTextAlignment="Center"
+                               Text="Only open networks"
+                               Style="{StaticResource MetaLabelStyle}" />
+                    </HorizontalStackLayout>
+
+                    <Button Text="Refresh Scan"
+                            Command="{Binding RefreshCommand}" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <Label Text="{Binding ErrorMessage}"
+                   TextColor="{StaticResource DangerColor}"
+                   IsVisible="{Binding ErrorMessage}" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}" />
+
+            <CollectionView ItemsSource="{Binding AccessPoints}"
+                            SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:AccessPointViewData">
+                        <Frame Style="{StaticResource MetricCardStyle}">
+                            <VerticalStackLayout Spacing="12">
+
+                                <Grid ColumnDefinitions="*,Auto"
+                                      ColumnSpacing="12">
+                                    <VerticalStackLayout Grid.Column="0"
+                                                         Spacing="2">
+                                        <Label Text="{Binding Ssid}"
+                                               FontSize="18"
+                                               FontAttributes="Bold" />
+                                        <Label Text="{Binding Bssid}"
+                                               Style="{StaticResource MetaLabelStyle}" />
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         Spacing="2">
+                                        <Label Text="{Binding SignalDbm, StringFormat='{}{0} dBm'}"
+                                               HorizontalTextAlignment="End"
+                                               FontAttributes="Bold"
+                                               TextColor="{StaticResource AccentSoftColor}" />
+                                        <Label Text="{Binding ConfidenceScore, StringFormat='Conf {0:F2}'}"
+                                               HorizontalTextAlignment="End"
+                                               Style="{StaticResource MetaLabelStyle}" />
+                                    </VerticalStackLayout>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,*,*"
+                                      ColumnSpacing="10">
+                                    <VerticalStackLayout Spacing="2">
+                                        <Label Text="Band"
+                                               Style="{StaticResource MetaLabelStyle}" />
+                                        <Label Text="{Binding Band}" />
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         Spacing="2">
+                                        <Label Text="Channel"
+                                               Style="{StaticResource MetaLabelStyle}" />
+                                        <Label Text="{Binding Channel, StringFormat='Ch {0}'}" />
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Column="2"
+                                                         Spacing="2">
+                                        <Label Text="Frequency"
+                                               Style="{StaticResource MetaLabelStyle}" />
+                                        <Label Text="{Binding FrequencyMhz, StringFormat='{}{0} MHz'}" />
+                                    </VerticalStackLayout>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,*,*"
+                                      ColumnSpacing="10">
+                                    <VerticalStackLayout Spacing="2">
+                                        <Label Text="Vendor"
+                                               Style="{StaticResource MetaLabelStyle}" />
+                                        <Label Text="{Binding Vendor}" />
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         Spacing="2">
+                                        <Label Text="Security"
+                                               Style="{StaticResource MetaLabelStyle}" />
+                                        <Label Text="{Binding Security}" />
+                                    </VerticalStackLayout>
+
+                                    <VerticalStackLayout Grid.Column="2"
+                                                         Spacing="2">
+                                        <Label Text="Class"
+                                               Style="{StaticResource MetaLabelStyle}" />
+                                        <Label Text="{Binding SecurityCategory}" />
+                                    </VerticalStackLayout>
+                                </Grid>
+
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

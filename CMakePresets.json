@@ -20,10 +20,14 @@
     {
       "name": "windows-debug",
       "inherits": ["base"],
-      "generator": "Ninja",
+      "generator": "Visual Studio 17 2022",
       "binaryDir": "${sourceDir}/build/windows-debug",
+      "architecture": {
+        "value": "x64",
+        "strategy": "set"
+      },
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
+        "CMAKE_CONFIGURATION_TYPES": "Debug"
       },
       "condition": {
         "type": "equals",
@@ -92,7 +96,8 @@
   "buildPresets": [
     {
       "name": "windows-debug",
-      "configurePreset": "windows-debug"
+      "configurePreset": "windows-debug",
+      "configuration": "Debug"
     },
     {
       "name": "macos-debug",
@@ -115,6 +120,7 @@
     {
       "name": "windows-debug",
       "configurePreset": "windows-debug",
+      "configuration": "Debug",
       "output": {
         "outputOnFailure": true
       }

@@ -22,4 +22,4 @@ src/dotnet/Vyre.App/obj/
 src/dotnet/Vyre.App.Core/bin/
 src/dotnet/Vyre.App.Core/obj/
 
-.fake
+.vscode/

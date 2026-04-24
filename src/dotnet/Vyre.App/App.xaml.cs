@@ -1,10 +1,21 @@
+using System;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Maui.Controls;
+
 namespace Vyre.App;
 
 public partial class App : Application
 {
-    public App()
+    private readonly IServiceProvider _services;
+
+    public App(IServiceProvider services)
     {
+        _services = services;
         InitializeComponent();
-        MainPage = new AppShell();
+    }
+
+    protected override Window CreateWindow(IActivationState? activationState)
+    {
+        return new Window(_services.GetRequiredService<AppShell>());
     }
 }

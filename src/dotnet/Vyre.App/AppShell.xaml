@@ -1,13 +1,49 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       xmlns:pages="clr-namespace:Vyre.App.Pages"
-       x:Class="Vyre.App.AppShell"
-       Shell.NavBarIsVisible="True">
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Vyre.App.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:Vyre.App.Pages"
+    FlyoutBehavior="Disabled"
+    Title="Vyre"
+    BackgroundColor="{StaticResource PageBackgroundColor}"
+    Shell.ForegroundColor="{StaticResource PrimaryTextColor}"
+    Shell.TitleColor="{StaticResource PrimaryTextColor}"
+    Shell.DisabledColor="{StaticResource MutedTextColor}"
+    Shell.UnselectedColor="{StaticResource SecondaryTextColor}"
+    Shell.TabBarBackgroundColor="{StaticResource SurfaceColor}"
+    Shell.TabBarForegroundColor="{StaticResource PrimaryTextColor}"
+    Shell.TabBarTitleColor="{StaticResource PrimaryTextColor}"
+    Shell.TabBarUnselectedColor="{StaticResource SecondaryTextColor}"
+    Shell.NavBarHasShadow="False">
+
     <TabBar>
-        <ShellContent Title="Status"
-                      Route="home">
-            <pages:HomePage />
-        </ShellContent>
+
+        <!-- Visible bottom tabs -->
+        <ShellContent Title="Scan"
+                      Route="scan"
+                      Icon="scan.png"
+                      ContentTemplate="{DataTemplate pages:ScanPage}" />
+
+        <ShellContent Title="Insights"
+                      Route="insights"
+                      Icon="insights.png"
+                      ContentTemplate="{DataTemplate pages:InsightsPage}" />
+
+        <ShellContent Title="Reports"
+                      Route="reports"
+                      Icon="reports.png"
+                      ContentTemplate="{DataTemplate pages:ReportsPage}" />
+
+        <ShellContent Title="Capture"
+                      Route="capture"
+                      Icon="capture.png"
+                      ContentTemplate="{DataTemplate pages:CapturePage}" />
+
+        <ShellContent Title="More"
+                      Route="more"
+                      Icon="more.png"
+                      ContentTemplate="{DataTemplate pages:MorePage}" />
+
     </TabBar>
 </Shell>

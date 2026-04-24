@@ -30,5 +30,8 @@
         <string>UIInterfaceOrientationLandscapeLeft</string>
         <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
+
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>Vyre uses local network access for network diagnostics and limited local connectivity checks.</string>
 </dict>
 </plist>

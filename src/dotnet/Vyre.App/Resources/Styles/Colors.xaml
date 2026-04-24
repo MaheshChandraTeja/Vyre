@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
-    <Color x:Key="AccentColor">#22C55E</Color>
-    <Color x:Key="PageBackgroundColor">#0B1020</Color>
-    <Color x:Key="CardBackgroundColor">#121A2E</Color>
+
+    <Color x:Key="AccentColor">#7C3AED</Color>
+    <Color x:Key="AccentSoftColor">#A78BFA</Color>
+    <Color x:Key="AccentMutedColor">#2B214D</Color>
+
+    <Color x:Key="PageBackgroundColor">#090B10</Color>
+    <Color x:Key="SurfaceColor">#0F1320</Color>
+    <Color x:Key="SurfaceAltColor">#10182A</Color>
+    <Color x:Key="SurfaceRaisedColor">#182033</Color>
+
     <Color x:Key="PrimaryTextColor">#F8FAFC</Color>
     <Color x:Key="SecondaryTextColor">#94A3B8</Color>
-    <Color x:Key="BorderColor">#23304B</Color>
+    <Color x:Key="MutedTextColor">#64748B</Color>
+
+    <Color x:Key="BorderColor">#232B3D</Color>
+    <Color x:Key="DividerColor">#1B2333</Color>
+
+    <Color x:Key="SuccessColor">#22C55E</Color>
+    <Color x:Key="WarningColor">#F59E0B</Color>
+    <Color x:Key="DangerColor">#EF4444</Color>
+    <Color x:Key="InfoColor">#38BDF8</Color>
+
+    <Color x:Key="ChipBackgroundColor">#171D2B</Color>
+    <Color x:Key="ChipBorderColor">#283248</Color>
+    <Color x:Key="InputBackgroundColor">#111827</Color>
+
 </ResourceDictionary>

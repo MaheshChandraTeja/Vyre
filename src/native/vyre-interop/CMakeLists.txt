@@ -1,12 +1,8 @@
-set(VYRE_INTEROP_SOURCES
+cmake_minimum_required(VERSION 3.26)
+
+add_library(vyre-interop SHARED
     src/vyre_api.cpp
 )
-
-if(APPLE AND CMAKE_SYSTEM_NAME STREQUAL "iOS")
-    add_library(vyre-interop STATIC ${VYRE_INTEROP_SOURCES})
-else()
-    add_library(vyre-interop SHARED ${VYRE_INTEROP_SOURCES})
-endif()
 
 add_library(vyre::interop ALIAS vyre-interop)
 
@@ -15,11 +11,18 @@ target_include_directories(vyre-interop
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-target_link_libraries(vyre-interop
+target_compile_features(vyre-interop PUBLIC cxx_std_20)
+
+target_compile_definitions(vyre-interop
     PRIVATE
-        vyre::core
+        VYRE_INTEROP_BUILDING=1
 )
 
-target_compile_features(vyre-interop PRIVATE cxx_std_20)
-set_target_properties(vyre-interop PROPERTIES OUTPUT_NAME "vyre-interop")
-target_compile_definitions(vyre-interop PRIVATE VYRE_INTEROP_BUILDING)
+target_link_libraries(vyre-interop
+    PUBLIC
+        vyre-core
+)
+
+set_target_properties(vyre-interop PROPERTIES
+    OUTPUT_NAME "vyre-interop"
+)

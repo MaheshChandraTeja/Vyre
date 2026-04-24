@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Vyre.App.Pages.DoctorPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Vyre.App.ViewModels"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Title="Doctor"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource PageBackgroundColor}">
+
+    <ScrollView BackgroundColor="{StaticResource PageBackgroundColor}">
+        <VerticalStackLayout Padding="24,28,24,36"
+                             Spacing="20"
+                             BackgroundColor="{StaticResource PageBackgroundColor}">
+
+            <!-- Header -->
+            <VerticalStackLayout Spacing="8">
+                <HorizontalStackLayout Spacing="12"
+                                       VerticalOptions="Center">
+                    <Image Source="doctor.png"
+                           WidthRequest="38"
+                           HeightRequest="38"
+                           VerticalOptions="Center"
+                           Aspect="AspectFit">
+                        <Image.Behaviors>
+                            <toolkit:IconTintColorBehavior TintColor="#F8FAFC" />
+                        </Image.Behaviors>
+                    </Image>
+
+                    <Label Text="Doctor"
+                           VerticalOptions="Center"
+                           Style="{StaticResource PageTitleLabelStyle}" />
+                </HorizontalStackLayout>
+
+                <Label Text="Device, network, and Vyre runtime health."
+                       Style="{StaticResource PageSubtitleLabelStyle}" />
+            </VerticalStackLayout>
+
+            <!-- Health Cockpit -->
+            <Frame Padding="24"
+                   CornerRadius="34"
+                   HasShadow="False"
+                   BackgroundColor="{StaticResource SurfaceAltColor}"
+                   BorderColor="{StaticResource BorderColor}">
+
+                <VerticalStackLayout Spacing="20">
+
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="16">
+                        <VerticalStackLayout Grid.Column="0"
+                                             Spacing="6"
+                                             VerticalOptions="Center">
+                            <Label Text="Health cockpit"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource PrimaryTextColor}"
+                                   LineBreakMode="TailTruncation"
+                                   MaxLines="1" />
+
+                            <Label Text="{Binding HealthSummary}"
+                                   FontSize="14"
+                                   TextColor="{StaticResource SecondaryTextColor}"
+                                   LineBreakMode="WordWrap"
+                                   MaxLines="3" />
+                        </VerticalStackLayout>
+
+                        <Frame Grid.Column="1"
+                               WidthRequest="94"
+                               HeightRequest="94"
+                               Padding="0"
+                               CornerRadius="47"
+                               HasShadow="False"
+                               BackgroundColor="{StaticResource AccentMutedColor}"
+                               BorderColor="{StaticResource AccentColor}"
+                               VerticalOptions="Center">
+                            <VerticalStackLayout Spacing="0"
+                                                 VerticalOptions="Center"
+                                                 HorizontalOptions="Center">
+                                <Label Text="{Binding HealthScore}"
+                                       FontSize="30"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource PrimaryTextColor}"
+                                       HorizontalTextAlignment="Center" />
+
+                                <Label Text="{Binding HealthLabel}"
+                                       FontSize="11"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource AccentSoftColor}"
+                                       HorizontalTextAlignment="Center"
+                                       LineBreakMode="NoWrap"
+                                       MaxLines="1" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </Grid>
+
+                    <ProgressBar Progress="{Binding HealthProgress}"
+                                 HeightRequest="8"
+                                 ProgressColor="{StaticResource AccentSoftColor}"
+                                 BackgroundColor="{StaticResource SurfaceRaisedColor}" />
+
+                    <Grid ColumnDefinitions="*,*,*"
+                          ColumnSpacing="10">
+
+                        <Frame Padding="14"
+                               CornerRadius="22"
+                               HasShadow="False"
+                               BackgroundColor="#0B1220"
+                               BorderColor="{StaticResource BorderColor}">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="Passed"
+                                       FontSize="12"
+                                       TextColor="{StaticResource SecondaryTextColor}" />
+                                <Label Text="{Binding PassedCount}"
+                                       FontSize="24"
+                                       FontAttributes="Bold"
+                                       TextColor="#22C55E" />
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <Frame Grid.Column="1"
+                               Padding="14"
+                               CornerRadius="22"
+                               HasShadow="False"
+                               BackgroundColor="#0B1220"
+                               BorderColor="{StaticResource BorderColor}">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="Warnings"
+                                       FontSize="12"
+                                       TextColor="{StaticResource SecondaryTextColor}" />
+                                <Label Text="{Binding WarningCount}"
+                                       FontSize="24"
+                                       FontAttributes="Bold"
+                                       TextColor="#F59E0B" />
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <Frame Grid.Column="2"
+                               Padding="14"
+                               CornerRadius="22"
+                               HasShadow="False"
+                               BackgroundColor="#0B1220"
+                               BorderColor="{StaticResource BorderColor}">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="Critical"
+                                       FontSize="12"
+                                       TextColor="{StaticResource SecondaryTextColor}" />
+                                <Label Text="{Binding CriticalCount}"
+                                       FontSize="24"
+                                       FontAttributes="Bold"
+                                       TextColor="#EF4444" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,*"
+                          ColumnSpacing="12">
+                        <Button Grid.Column="0"
+                                Text="Run Doctor"
+                                Command="{Binding RefreshCommand}"
+                                HeightRequest="56"
+                                CornerRadius="22"
+                                FontAttributes="Bold" />
+
+                        <Button Grid.Column="1"
+                                Text="Export"
+                                Command="{Binding ExportSnapshotCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                HeightRequest="56"
+                                CornerRadius="22"
+                                FontAttributes="Bold" />
+                    </Grid>
+
+                    <Label Text="{Binding LastCheckedText, StringFormat='Last checked {0}'}"
+                           FontSize="12"
+                           TextColor="{StaticResource MutedTextColor}" />
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}" />
+
+            <!-- Device Diagnostics -->
+            <Frame Padding="20"
+                   CornerRadius="32"
+                   HasShadow="False"
+                   BackgroundColor="{StaticResource SurfaceColor}"
+                   BorderColor="{StaticResource BorderColor}">
+
+                <VerticalStackLayout Spacing="16">
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0"
+                                             Spacing="4"
+                                             VerticalOptions="Center">
+                            <Label Text="Device diagnostics"
+                                   FontSize="23"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource PrimaryTextColor}"
+                                   LineBreakMode="TailTruncation"
+                                   MaxLines="1" />
+
+                            <Label Text="{Binding DeviceSummary}"
+                                   FontSize="14"
+                                   TextColor="{StaticResource SecondaryTextColor}"
+                                   LineBreakMode="WordWrap"
+                                   MaxLines="2" />
+                        </VerticalStackLayout>
+
+                        <Border Grid.Column="1"
+                                Padding="12,6"
+                                Stroke="{StaticResource BorderColor}"
+                                StrokeThickness="1"
+                                BackgroundColor="{StaticResource SurfaceRaisedColor}"
+                                StrokeShape="RoundRectangle 999"
+                                HorizontalOptions="End"
+                                VerticalOptions="Start">
+                            <Label Text="{Binding PlatformLabel}"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource AccentSoftColor}"
+                                   LineBreakMode="NoWrap"
+                                   MaxLines="1" />
+                        </Border>
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="12"
+                                         BindableLayout.ItemsSource="{Binding DeviceSignals}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="vm:DoctorSignalItem">
+                                <Frame Padding="16,14"
+                                       CornerRadius="24"
+                                       HasShadow="False"
+                                       BackgroundColor="#0B1220"
+                                       BorderColor="{StaticResource BorderColor}">
+                                    <Grid ColumnDefinitions="Auto,*,Auto"
+                                          ColumnSpacing="14"
+                                          VerticalOptions="Center">
+
+                                        <Frame Grid.Column="0"
+                                               WidthRequest="14"
+                                               HeightRequest="14"
+                                               Padding="0"
+                                               CornerRadius="7"
+                                               HasShadow="False"
+                                               BackgroundColor="{Binding AccentColor}"
+                                               BorderColor="{Binding AccentColor}"
+                                               VerticalOptions="Start"
+                                               Margin="0,5,0,0" />
+
+                                        <VerticalStackLayout Grid.Column="1"
+                                                             Spacing="5"
+                                                             VerticalOptions="Center">
+                                            <Label Text="{Binding Name}"
+                                                   FontSize="17"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{StaticResource PrimaryTextColor}"
+                                                   LineBreakMode="TailTruncation"
+                                                   MaxLines="1" />
+
+                                            <Label Text="{Binding Detail}"
+                                                   FontSize="13"
+                                                   TextColor="{StaticResource SecondaryTextColor}"
+                                                   LineBreakMode="WordWrap"
+                                                   MaxLines="2" />
+                                        </VerticalStackLayout>
+
+                                        <Border Grid.Column="2"
+                                                Padding="12,6"
+                                                Stroke="{StaticResource BorderColor}"
+                                                StrokeThickness="1"
+                                                BackgroundColor="{StaticResource SurfaceRaisedColor}"
+                                                StrokeShape="RoundRectangle 999"
+                                                HorizontalOptions="End"
+                                                VerticalOptions="Start"
+                                                Margin="0,2,0,0">
+                                            <Label Text="{Binding Level}"
+                                                   FontSize="11"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{Binding AccentColor}"
+                                                   HorizontalTextAlignment="Center"
+                                                   VerticalTextAlignment="Center"
+                                                   LineBreakMode="NoWrap"
+                                                   MaxLines="1" />
+                                        </Border>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Network Diagnostics -->
+            <Frame Padding="20"
+                   CornerRadius="32"
+                   HasShadow="False"
+                   BackgroundColor="{StaticResource SurfaceColor}"
+                   BorderColor="{StaticResource BorderColor}">
+
+                <VerticalStackLayout Spacing="16">
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0"
+                                             Spacing="4"
+                                             VerticalOptions="Center">
+                            <Label Text="Network diagnostics"
+                                   FontSize="23"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource PrimaryTextColor}"
+                                   LineBreakMode="TailTruncation"
+                                   MaxLines="1" />
+
+                            <Label Text="{Binding NetworkSummary}"
+                                   FontSize="14"
+                                   TextColor="{StaticResource SecondaryTextColor}"
+                                   LineBreakMode="WordWrap"
+                                   MaxLines="2" />
+                        </VerticalStackLayout>
+
+                        <Border Grid.Column="1"
+                                Padding="12,6"
+                                Stroke="{StaticResource BorderColor}"
+                                StrokeThickness="1"
+                                BackgroundColor="{StaticResource SurfaceRaisedColor}"
+                                StrokeShape="RoundRectangle 999"
+                                HorizontalOptions="End"
+                                VerticalOptions="Start">
+                            <Label Text="{Binding CurrentNetworkMessage}"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource AccentSoftColor}"
+                                   LineBreakMode="NoWrap"
+                                   MaxLines="1" />
+                        </Border>
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="12"
+                                         BindableLayout.ItemsSource="{Binding NetworkSignals}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="vm:DoctorSignalItem">
+                                <Frame Padding="16,14"
+                                       CornerRadius="24"
+                                       HasShadow="False"
+                                       BackgroundColor="#0B1220"
+                                       BorderColor="{StaticResource BorderColor}">
+                                    <Grid ColumnDefinitions="Auto,*,Auto"
+                                          ColumnSpacing="14"
+                                          VerticalOptions="Center">
+
+                                        <Frame Grid.Column="0"
+                                               WidthRequest="14"
+                                               HeightRequest="14"
+                                               Padding="0"
+                                               CornerRadius="7"
+                                               HasShadow="False"
+                                               BackgroundColor="{Binding AccentColor}"
+                                               BorderColor="{Binding AccentColor}"
+                                               VerticalOptions="Start"
+                                               Margin="0,5,0,0" />
+
+                                        <VerticalStackLayout Grid.Column="1"
+                                                             Spacing="5"
+                                                             VerticalOptions="Center">
+                                            <Label Text="{Binding Name}"
+                                                   FontSize="17"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{StaticResource PrimaryTextColor}"
+                                                   LineBreakMode="TailTruncation"
+                                                   MaxLines="1" />
+
+                                            <Label Text="{Binding Detail}"
+                                                   FontSize="13"
+                                                   TextColor="{StaticResource SecondaryTextColor}"
+                                                   LineBreakMode="WordWrap"
+                                                   MaxLines="2" />
+                                        </VerticalStackLayout>
+
+                                        <Border Grid.Column="2"
+                                                Padding="12,6"
+                                                Stroke="{StaticResource BorderColor}"
+                                                StrokeThickness="1"
+                                                BackgroundColor="{StaticResource SurfaceRaisedColor}"
+                                                StrokeShape="RoundRectangle 999"
+                                                HorizontalOptions="End"
+                                                VerticalOptions="Start"
+                                                Margin="0,2,0,0">
+                                            <Label Text="{Binding Level}"
+                                                   FontSize="11"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{Binding AccentColor}"
+                                                   HorizontalTextAlignment="Center"
+                                                   VerticalTextAlignment="Center"
+                                                   LineBreakMode="NoWrap"
+                                                   MaxLines="1" />
+                                        </Border>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Vyre Runtime Diagnostics -->
+            <Frame Padding="20"
+                   CornerRadius="32"
+                   HasShadow="False"
+                   BackgroundColor="{StaticResource SurfaceColor}"
+                   BorderColor="{StaticResource BorderColor}">
+
+                <VerticalStackLayout Spacing="16">
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0"
+                                             Spacing="4"
+                                             VerticalOptions="Center">
+                            <Label Text="Vyre runtime"
+                                   FontSize="23"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource PrimaryTextColor}"
+                                   LineBreakMode="TailTruncation"
+                                   MaxLines="1" />
+
+                            <Label Text="{Binding VyreSummary}"
+                                   FontSize="14"
+                                   TextColor="{StaticResource SecondaryTextColor}"
+                                   LineBreakMode="WordWrap"
+                                   MaxLines="2" />
+                        </VerticalStackLayout>
+
+                        <Border Grid.Column="1"
+                                Padding="12,6"
+                                Stroke="{StaticResource BorderColor}"
+                                StrokeThickness="1"
+                                BackgroundColor="{StaticResource SurfaceRaisedColor}"
+                                StrokeShape="RoundRectangle 999"
+                                HorizontalOptions="End"
+                                VerticalOptions="Start">
+                            <Label Text="Core"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource AccentSoftColor}" />
+                        </Border>
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="12"
+                                         BindableLayout.ItemsSource="{Binding VyreSignals}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="vm:DoctorSignalItem">
+                                <Frame Padding="16,14"
+                                       CornerRadius="24"
+                                       HasShadow="False"
+                                       BackgroundColor="#0B1220"
+                                       BorderColor="{StaticResource BorderColor}">
+                                    <Grid ColumnDefinitions="Auto,*,Auto"
+                                          ColumnSpacing="14"
+                                          VerticalOptions="Center">
+
+                                        <Frame Grid.Column="0"
+                                               WidthRequest="14"
+                                               HeightRequest="14"
+                                               Padding="0"
+                                               CornerRadius="7"
+                                               HasShadow="False"
+                                               BackgroundColor="{Binding AccentColor}"
+                                               BorderColor="{Binding AccentColor}"
+                                               VerticalOptions="Start"
+                                               Margin="0,5,0,0" />
+
+                                        <VerticalStackLayout Grid.Column="1"
+                                                             Spacing="5"
+                                                             VerticalOptions="Center">
+                                            <Label Text="{Binding Name}"
+                                                   FontSize="17"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{StaticResource PrimaryTextColor}"
+                                                   LineBreakMode="TailTruncation"
+                                                   MaxLines="1" />
+
+                                            <Label Text="{Binding Detail}"
+                                                   FontSize="13"
+                                                   TextColor="{StaticResource SecondaryTextColor}"
+                                                   LineBreakMode="WordWrap"
+                                                   MaxLines="2" />
+                                        </VerticalStackLayout>
+
+                                        <Border Grid.Column="2"
+                                                Padding="12,6"
+                                                Stroke="{StaticResource BorderColor}"
+                                                StrokeThickness="1"
+                                                BackgroundColor="{StaticResource SurfaceRaisedColor}"
+                                                StrokeShape="RoundRectangle 999"
+                                                HorizontalOptions="End"
+                                                VerticalOptions="Start"
+                                                Margin="0,2,0,0">
+                                            <Label Text="{Binding Level}"
+                                                   FontSize="11"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{Binding AccentColor}"
+                                                   HorizontalTextAlignment="Center"
+                                                   VerticalTextAlignment="Center"
+                                                   LineBreakMode="NoWrap"
+                                                   MaxLines="1" />
+                                        </Border>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Remedy Engine -->
+            <Frame Padding="20"
+                   CornerRadius="32"
+                   HasShadow="False"
+                   BackgroundColor="{StaticResource SurfaceAltColor}"
+                   BorderColor="{StaticResource BorderColor}">
+
+                <VerticalStackLayout Spacing="16">
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="12">
+                        <VerticalStackLayout Grid.Column="0"
+                                             Spacing="4"
+                                             VerticalOptions="Center">
+                            <Label Text="Remedy Engine"
+                                   FontSize="23"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource PrimaryTextColor}"
+                                   LineBreakMode="TailTruncation"
+                                   MaxLines="1" />
+
+                            <Label Text="Prioritized fixes based on the current diagnostic state."
+                                   FontSize="14"
+                                   TextColor="{StaticResource SecondaryTextColor}"
+                                   LineBreakMode="WordWrap"
+                                   MaxLines="2" />
+                        </VerticalStackLayout>
+
+                        <Border Grid.Column="1"
+                                Padding="12,6"
+                                Stroke="{StaticResource BorderColor}"
+                                StrokeThickness="1"
+                                BackgroundColor="{StaticResource SurfaceRaisedColor}"
+                                StrokeShape="RoundRectangle 999"
+                                HorizontalOptions="End"
+                                VerticalOptions="Start">
+                            <Label Text="{Binding RemedyCountText}"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource AccentSoftColor}" />
+                        </Border>
+                    </Grid>
+
+                    <Frame IsVisible="{Binding HasNoRemedies}"
+                           Padding="16"
+                           CornerRadius="24"
+                           HasShadow="False"
+                           BackgroundColor="#0B1220"
+                           BorderColor="{StaticResource BorderColor}">
+                        <Label Text="No remedies required. Suspiciously competent. Enjoy this rare moment before software remembers it exists."
+                               FontSize="14"
+                               TextColor="{StaticResource SecondaryTextColor}"
+                               LineBreakMode="WordWrap" />
+                    </Frame>
+
+                    <VerticalStackLayout Spacing="12"
+                                         BindableLayout.ItemsSource="{Binding Remedies}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="vm:DoctorRemedyItem">
+                                <Frame Padding="16,14"
+                                       CornerRadius="24"
+                                       HasShadow="False"
+                                       BackgroundColor="#0B1220"
+                                       BorderColor="{StaticResource BorderColor}">
+                                    <Grid ColumnDefinitions="Auto,*"
+                                          ColumnSpacing="14">
+                                        <Border Grid.Column="0"
+                                                WidthRequest="42"
+                                                HeightRequest="42"
+                                                Stroke="{StaticResource AccentColor}"
+                                                StrokeThickness="1"
+                                                BackgroundColor="{StaticResource AccentMutedColor}"
+                                                StrokeShape="RoundRectangle 21"
+                                                VerticalOptions="Start">
+                                            <Label Text="{Binding Priority}"
+                                                   FontSize="13"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{StaticResource AccentSoftColor}"
+                                                   HorizontalTextAlignment="Center"
+                                                   VerticalTextAlignment="Center" />
+                                        </Border>
+
+                                        <VerticalStackLayout Grid.Column="1"
+                                                             Spacing="6">
+                                            <Label Text="{Binding Title}"
+                                                   FontSize="17"
+                                                   FontAttributes="Bold"
+                                                   TextColor="{StaticResource PrimaryTextColor}"
+                                                   LineBreakMode="WordWrap"
+                                                   MaxLines="2" />
+
+                                            <Label Text="{Binding Action}"
+                                                   FontSize="13"
+                                                   TextColor="{StaticResource SecondaryTextColor}"
+                                                   LineBreakMode="WordWrap" />
+
+                                            <Label Text="{Binding WhyItMatters}"
+                                                   FontSize="12"
+                                                   TextColor="{StaticResource MutedTextColor}"
+                                                   LineBreakMode="WordWrap" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame IsVisible="{Binding HasError}"
+                   Padding="18"
+                   CornerRadius="24"
+                   HasShadow="False"
+                   BackgroundColor="#2A1018"
+                   BorderColor="#7F1D1D">
+                <Label Text="{Binding ErrorMessage}"
+                       FontSize="14"
+                       TextColor="#FCA5A5"
+                       LineBreakMode="WordWrap" />
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

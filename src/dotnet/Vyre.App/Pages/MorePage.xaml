@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Vyre.App.Pages.MorePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Title="More"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource PageBackgroundColor}">
+
+    <ScrollView BackgroundColor="{StaticResource PageBackgroundColor}">
+        <VerticalStackLayout Padding="24,28,24,36"
+                             Spacing="20"
+                             BackgroundColor="{StaticResource PageBackgroundColor}">
+
+            <VerticalStackLayout Spacing="8">
+                <HorizontalStackLayout Spacing="12"
+                                       VerticalOptions="Center">
+
+                    <Image Source="settings.png"
+                           WidthRequest="38"
+                           HeightRequest="38"
+                           VerticalOptions="Center"
+                           Aspect="AspectFit">
+                        <Image.Behaviors>
+                            <toolkit:IconTintColorBehavior TintColor="#F8FAFC" />
+                        </Image.Behaviors>
+                    </Image>
+
+                    <Label Text="More"
+                           Style="{StaticResource PageTitleLabelStyle}"
+                           VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <Label Text="Advanced tools, diagnostics, and app configuration."
+                       Style="{StaticResource PageSubtitleLabelStyle}" />
+            </VerticalStackLayout>
+
+            <Border Padding="22"
+                    BackgroundColor="{StaticResource SurfaceAltColor}"
+                    Stroke="{StaticResource BorderColor}"
+                    StrokeShape="RoundRectangle 32">
+
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Control center"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource PrimaryTextColor}" />
+
+                    <Label Text="Access advanced diagnostics, network usage insights, and app preferences from one place."
+                        FontSize="14"
+                        TextColor="{StaticResource SecondaryTextColor}"
+                        LineBreakMode="WordWrap" />
+                </VerticalStackLayout>
+            </Border>
+
+            <VerticalStackLayout Spacing="14">
+
+                <Border x:Name="UsageCard"
+                        Padding="20"
+                        BackgroundColor="{StaticResource SurfaceColor}"
+                        Stroke="{StaticResource BorderColor}"
+                        StrokeShape="RoundRectangle 30">
+
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnUsageTapped" />
+                    </Border.GestureRecognizers>
+
+                    <Grid ColumnDefinitions="Auto,*,Auto"
+                          ColumnSpacing="16"
+                          VerticalOptions="Center">
+
+                        <Border Grid.Column="0"
+                                WidthRequest="54"
+                                HeightRequest="54"
+                                Padding="13"
+                                BackgroundColor="{StaticResource SurfaceRaisedColor}"
+                                Stroke="{StaticResource BorderColor}"
+                                StrokeShape="RoundRectangle 22">
+                            <Image Source="usage.png"
+                                   Aspect="AspectFit">
+                                <Image.Behaviors>
+                                    <toolkit:IconTintColorBehavior TintColor="#A78BFA" />
+                                </Image.Behaviors>
+                            </Image>
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1"
+                                             Spacing="4"
+                                             VerticalOptions="Center">
+                            <Label Text="Usage"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource PrimaryTextColor}" />
+
+                            <Label Text="Per-app network usage, top talkers, and data trends."
+                                   FontSize="13"
+                                   TextColor="{StaticResource SecondaryTextColor}"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <Label Grid.Column="2"
+                               Text="›"
+                               FontSize="32"
+                               TextColor="{StaticResource MutedTextColor}"
+                               VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <Border x:Name="UsageUnavailableCard"
+                        IsVisible="False"
+                        Padding="20"
+                        BackgroundColor="{StaticResource SurfaceColor}"
+                        Stroke="{StaticResource BorderColor}"
+                        StrokeShape="RoundRectangle 30">
+
+                    <Grid ColumnDefinitions="Auto,*"
+                          ColumnSpacing="16"
+                          VerticalOptions="Center">
+
+                        <Border Grid.Column="0"
+                                WidthRequest="54"
+                                HeightRequest="54"
+                                Padding="13"
+                                BackgroundColor="{StaticResource SurfaceRaisedColor}"
+                                Stroke="{StaticResource BorderColor}"
+                                StrokeShape="RoundRectangle 22">
+                            <Image Source="usage.png"
+                                   Aspect="AspectFit">
+                                <Image.Behaviors>
+                                    <toolkit:IconTintColorBehavior TintColor="#64748B" />
+                                </Image.Behaviors>
+                            </Image>
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1"
+                                             Spacing="4"
+                                             VerticalOptions="Center">
+                            <Label Text="Usage unavailable"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource PrimaryTextColor}" />
+
+                            <Label Text="This platform does not expose reliable per-app network usage. Vyre refuses to invent telemetry like a villain."
+                                   FontSize="13"
+                                   TextColor="{StaticResource SecondaryTextColor}"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+                <Border Padding="20"
+                        BackgroundColor="{StaticResource SurfaceColor}"
+                        Stroke="{StaticResource BorderColor}"
+                        StrokeShape="RoundRectangle 30">
+
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDoctorTapped" />
+                    </Border.GestureRecognizers>
+
+                    <Grid ColumnDefinitions="Auto,*,Auto"
+                          ColumnSpacing="16"
+                          VerticalOptions="Center">
+
+                        <Border Grid.Column="0"
+                                WidthRequest="54"
+                                HeightRequest="54"
+                                Padding="13"
+                                BackgroundColor="{StaticResource SurfaceRaisedColor}"
+                                Stroke="{StaticResource BorderColor}"
+                                StrokeShape="RoundRectangle 22">
+                            <Image Source="doctor.png"
+                                   Aspect="AspectFit">
+                                <Image.Behaviors>
+                                    <toolkit:IconTintColorBehavior TintColor="#A78BFA" />
+                                </Image.Behaviors>
+                            </Image>
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1"
+                                             Spacing="4"
+                                             VerticalOptions="Center">
+                            <Label Text="Doctor"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource PrimaryTextColor}" />
+
+                            <Label Text="Check permissions, platform capability, diagnostics, and app health."
+                                   FontSize="13"
+                                   TextColor="{StaticResource SecondaryTextColor}"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <Label Grid.Column="2"
+                               Text="›"
+                               FontSize="32"
+                               TextColor="{StaticResource MutedTextColor}"
+                               VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <Border Padding="20"
+                        BackgroundColor="{StaticResource SurfaceColor}"
+                        Stroke="{StaticResource BorderColor}"
+                        StrokeShape="RoundRectangle 30">
+
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSettingsTapped" />
+                    </Border.GestureRecognizers>
+
+                    <Grid ColumnDefinitions="Auto,*,Auto"
+                          ColumnSpacing="16"
+                          VerticalOptions="Center">
+
+                        <Border Grid.Column="0"
+                                WidthRequest="54"
+                                HeightRequest="54"
+                                Padding="13"
+                                BackgroundColor="{StaticResource SurfaceRaisedColor}"
+                                Stroke="{StaticResource BorderColor}"
+                                StrokeShape="RoundRectangle 22">
+                            <Image Source="settings.png"
+                                   Aspect="AspectFit">
+                                <Image.Behaviors>
+                                    <toolkit:IconTintColorBehavior TintColor="#A78BFA" />
+                                </Image.Behaviors>
+                            </Image>
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1"
+                                             Spacing="4"
+                                             VerticalOptions="Center">
+                            <Label Text="Settings"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource PrimaryTextColor}" />
+
+                            <Label Text="Manage scan behavior, privacy preferences, storage, and diagnostics."
+                                   FontSize="13"
+                                   TextColor="{StaticResource SecondaryTextColor}"
+                                   LineBreakMode="WordWrap" />
+                        </VerticalStackLayout>
+
+                        <Label Grid.Column="2"
+                               Text="›"
+                               FontSize="32"
+                               TextColor="{StaticResource MutedTextColor}"
+                               VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
