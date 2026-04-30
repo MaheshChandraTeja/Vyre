@@ -14,7 +14,7 @@
 
     <ApplicationTitle>Vyre</ApplicationTitle>
     <ApplicationId>com.kairais.vyre</ApplicationId>
-    <ApplicationDisplayVersion>0.1.0</ApplicationDisplayVersion>
+    <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
 
     <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net10.0-android'">24.0</SupportedOSPlatformVersion>
@@ -22,6 +22,7 @@
     <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net10.0-windows10.0.19041.0'">10.0.17763.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion Condition="'$(TargetFramework)' == 'net10.0-windows10.0.19041.0'">10.0.17763.0</TargetPlatformMinVersion>
     <WindowsPackageType Condition="'$(TargetFramework)' == 'net10.0-windows10.0.19041.0'">None</WindowsPackageType>
+    <WindowsAppSDKSelfContained Condition="'$(TargetFramework)' == 'net10.0-windows10.0.19041.0'">true</WindowsAppSDKSelfContained>
 
     <NoWarn>$(NoWarn);CA1416;CA1422;MVVMTK0045</NoWarn>
   </PropertyGroup>
@@ -68,7 +69,17 @@
   </ItemGroup>
 
   <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
-    <None Include="..\..\..\build\windows-debug\artifacts\bin\Debug\vyre-interop.dll" Condition="Exists('..\..\..\build\windows-debug\artifacts\bin\Debug\vyre-interop.dll')" Link="vyre-interop.dll" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\..\build\windows-release\artifacts\bin\Release\vyre-interop.dll"
+          Condition="Exists('..\..\..\build\windows-release\artifacts\bin\Release\vyre-interop.dll')"
+          Link="vyre-interop.dll"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest" />
+
+    <None Include="..\..\..\build\windows-debug\artifacts\bin\Debug\vyre-interop.dll"
+          Condition="!Exists('..\..\..\build\windows-release\artifacts\bin\Release\vyre-interop.dll') And Exists('..\..\..\build\windows-debug\artifacts\bin\Debug\vyre-interop.dll')"
+          Link="vyre-interop.dll"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

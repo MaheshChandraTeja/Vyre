@@ -32,3 +32,28 @@ src/dotnet/Vyre.App.Core/obj/
 
 # Vyre release signing key
 src/dotnet/Vyre.App/vyre-release.keystore
+
+# Release/package output
+/release/
+/artifacts/
+/packages/
+/dist/
+/publish/
+
+# Android signing
+/secrets/
+*.keystore
+*.jks
+*.aab
+*.apk
+
+# Windows signing/installers
+*.pfx
+*.cer
+*.crt
+*.msi
+*.msix
+*.appx
+*.appxbundle
+*-setup.exe
+*-portable.zip

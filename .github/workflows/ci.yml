@@ -56,10 +56,14 @@ jobs:
         shell: pwsh
         run: dotnet workload install maui --ignore-failed-sources
 
-      - name: Restore
+      - name: Restore MAUI (Windows)
         shell: pwsh
-        run: dotnet restore .\Vyre.sln
+        run: dotnet restore .\src\dotnet\Vyre.App\Vyre.App.csproj -r win-x64 -p:TargetFrameworks=net10.0-windows10.0.19041.0 -p:Configuration=Release
+
+      - name: Restore Core
+        shell: pwsh
+        run: dotnet restore .\src\dotnet\Vyre.App.Core\Vyre.App.Core.csproj -p:Configuration=Release
 
       - name: Build MAUI (Windows)
         shell: pwsh
-        run: dotnet build .\src\dotnet\Vyre.App\Vyre.App.csproj -c Release -f net10.0-windows10.0.19041.0 --no-restore
+        run: dotnet build .\src\dotnet\Vyre.App\Vyre.App.csproj -c Release -f net10.0-windows10.0.19041.0 -r win-x64 --no-restore

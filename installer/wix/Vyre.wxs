@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?ifndef Version ?>
+<?define Version = "1.0.0" ?>
+<?endif?>
+
+<?ifndef SourceDir ?>
+<?define SourceDir = "..\..\src\dotnet\Vyre.App\bin\Release\net10.0-windows10.0.19041.0\win-x64\publish" ?>
+<?endif?>
+
+<?ifndef ExeName ?>
+<?define ExeName = "Vyre.App.exe" ?>
+<?endif?>
+
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+    <Package
+        Name="Vyre"
+        Manufacturer="Kairais Tech"
+        Version="$(var.Version)"
+        UpgradeCode="4B2F7608-41A6-4E90-A95E-61E5E6F27E15"
+        Scope="perMachine">
+
+        <MajorUpgrade DowngradeErrorMessage="A newer version of Vyre is already installed." />
+        <MediaTemplate EmbedCab="yes" />
+
+        <StandardDirectory Id="ProgramFiles64Folder">
+            <Directory Id="CompanyFolder" Name="Kairais Tech">
+                <Directory Id="INSTALLFOLDER" Name="Vyre" />
+            </Directory>
+        </StandardDirectory>
+
+        <StandardDirectory Id="ProgramMenuFolder">
+            <Directory Id="ApplicationProgramsFolder" Name="Vyre" />
+        </StandardDirectory>
+
+        <Feature Id="MainFeature" Title="Vyre" Level="1">
+            <Files Include="$(var.SourceDir)\**" Directory="INSTALLFOLDER">
+                <Exclude Files="$(var.SourceDir)\**\*.pdb" />
+            </Files>
+
+            <ComponentRef Id="ApplicationShortcutComponent" />
+        </Feature>
+
+        <Component Id="ApplicationShortcutComponent" Directory="ApplicationProgramsFolder" Guid="*">
+            <Shortcut
+                Id="ApplicationStartMenuShortcut"
+                Name="Vyre"
+                Description="Launch Vyre"
+                Target="[INSTALLFOLDER]$(var.ExeName)"
+                WorkingDirectory="INSTALLFOLDER" />
+
+            <RemoveFolder Id="RemoveApplicationProgramsFolder" On="uninstall" />
+
+            <RegistryValue
+                Root="HKCU"
+                Key="Software\Kairais Tech\Vyre"
+                Name="installed"
+                Type="integer"
+                Value="1"
+                KeyPath="yes" />
+        </Component>
+    </Package>
+</Wix>
